@@ -6,7 +6,7 @@ import UserSection from "@/components/Navbar/user-section"
 
 function Navbar() {
     return (
-        <div className="shadow-sm">
+        <div className="mb-10 shadow-sm">
             <Container>
                 <nav className="flex items-center justify-between py-5">
                     <Link

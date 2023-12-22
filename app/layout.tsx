@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Bona_Nova } from "next/font/google"
+import { Akshar } from "next/font/google"
 
 import "./globals.css"
 
@@ -8,7 +8,7 @@ import { UserProvider } from "@auth0/nextjs-auth0/client"
 import Navbar from "@/components/Navbar/navbar"
 import TailwindIndicator from "@/components/tailwind-indicator"
 
-const font = Bona_Nova({
+const font = Akshar({
     subsets: ["latin"],
     weight: "400",
 })
