@@ -1,84 +1,19 @@
-import placeholder from "@/public/images/img.webp"
+import {
+    getPlayingNowMovies,
+    getTopRatedMovies,
+    getTrendingMovies,
+    getUpcomingMovies,
+} from "@/actions/get-movies"
 
 import Container from "@/components/ui/container"
 import ScrollMovies from "@/components/ui/scroll-movies"
 
-const MOVIES = [
-    {
-        title: "Aquaman",
-        categories: ["Action", "Sci-Fi"],
-        reviewAverage: 6.3,
-        positiveReviewsCount: 30,
-        passiveReviewsCount: 15,
-        negativeReviewsCount: 28,
-        image: placeholder.src,
-    },
-    {
-        title: "Batman",
-        categories: ["Action", "Sci-Fi"],
-        reviewAverage: 8.3,
-        positiveReviewsCount: 20,
-        passiveReviewsCount: 100,
-        negativeReviewsCount: 38,
-        image: placeholder.src,
-    },
-    {
-        title: "Spiederman",
-        categories: ["Action", "Sci-Fi"],
-        reviewAverage: 5.3,
-        positiveReviewsCount: 20,
-        passiveReviewsCount: 15,
-        negativeReviewsCount: 58,
-        image: placeholder.src,
-    },
-    {
-        title: "Aquaman",
-        categories: ["Action", "Sci-Fi"],
-        reviewAverage: 6.3,
-        positiveReviewsCount: 30,
-        passiveReviewsCount: 15,
-        negativeReviewsCount: 28,
-        image: placeholder.src,
-    },
-    {
-        title: "Aquama ndddddddd ddddddddddd ddddddd",
-        categories: ["Action", "Sci-Fi"],
-        reviewAverage: 6.3,
-        positiveReviewsCount: 30,
-        passiveReviewsCount: 15,
-        negativeReviewsCount: 28,
-        image: placeholder.src,
-    },
-    {
-        title: "Aquaman",
-        categories: ["Action", "Sci-Fi"],
-        reviewAverage: 3.3,
-        positiveReviewsCount: 30,
-        passiveReviewsCount: 15,
-        negativeReviewsCount: 28,
-        image: placeholder.src,
-    },
-    {
-        title: "Aquaman",
-        categories: ["Action", "Sci-Fi"],
-        reviewAverage: 3.3,
-        positiveReviewsCount: 30,
-        passiveReviewsCount: 15,
-        negativeReviewsCount: 28,
-        image: placeholder.src,
-    },
-    {
-        title: "Aquaman",
-        categories: ["Action", "Sci-Fi"],
-        reviewAverage: 3.3,
-        positiveReviewsCount: 30,
-        passiveReviewsCount: 15,
-        negativeReviewsCount: 28,
-        image: placeholder.src,
-    },
-]
+export default async function Home() {
+    const playingNowMoviesData = await getPlayingNowMovies()
+    const topRatedMoviesData = await getTopRatedMovies()
+    const trandingMoviesData = await getTrendingMovies()
+    const upcomingMoviesData = await getUpcomingMovies()
 
-export default function Home() {
     return (
         <Container className="gap-10">
             <div className="flex justify-center md:justify-start">
@@ -91,12 +26,12 @@ export default function Home() {
                     </h2>
                 </div>
             </div>
-            <ScrollMovies movies={MOVIES} heading="New Releases" />
+            {/* <ScrollMovies movies={MOVIES} heading="New Releases" />
             <ScrollMovies
                 movies={MOVIES}
                 heading="Upcoming Releases"
                 smallCard={true}
-            />
+            /> */}
         </Container>
     )
 }

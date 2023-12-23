@@ -1,16 +1,27 @@
+"use client"
+
 import { User } from "@/types"
 import { getSession } from "@auth0/nextjs-auth0"
+import { useUser } from "@auth0/nextjs-auth0/client"
 
 import AuthenticateButtons from "@/components/Navbar/authenticate-buttons"
 import UserButton from "@/components/Navbar/user-button"
 
-async function UserSection() {
-    const session = await getSession()
+function UserSection() {
+    const { user, error, isLoading } = useUser()
+
+    if (isLoading) {
+        return null
+    }
+
+    if (error) {
+        return <AuthenticateButtons />
+    }
 
     return (
         <>
-            {session?.user ? (
-                <UserButton user={session.user as User} />
+            {user ? (
+                <UserButton user={user as User} />
             ) : (
                 <AuthenticateButtons />
             )}

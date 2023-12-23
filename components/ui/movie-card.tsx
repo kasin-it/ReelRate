@@ -1,6 +1,5 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Opinions } from "@/enums/opinions"
 import { Movie } from "@/types"
 
 import { cn, getRating } from "@/lib/utils"
