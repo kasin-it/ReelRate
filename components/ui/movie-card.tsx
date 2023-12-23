@@ -1,43 +1,42 @@
 import Image from "next/image"
 import Link from "next/link"
-import placeholder from "@/public/images/img.webp"
+import { Opinions } from "@/enums/opinions"
+import { Movie } from "@/types"
 
-import { cn } from "@/lib/utils"
+import { cn, getRating } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardTitle } from "@/components/ui/card"
+import ReviewsBar from "@/components/ui/reviews-bar"
 import { Separator } from "@/components/ui/separator"
 
-import ReviewsBar from "./reviews-bar"
-
 interface MovieCardProps {
-    title?: string
-    categories?: string[] | string
-    reviewAverage: number
-    reviewsCount?: number
-    positiveReviewsCount?: number
-    passiveReviewsCount?: number
-    negativeReviewsCount?: number
+    movie: Movie
 }
 
-function MovieCard({ reviewAverage }: MovieCardProps) {
-    let color = ""
+function MovieCard({
+    movie: {
+        reviewAverage,
+        title,
+        categories,
+        positiveReviewsCount,
+        passiveReviewsCount,
+        negativeReviewsCount,
+        image,
+    },
+}: MovieCardProps) {
+    const { color, opinion } = getRating(reviewAverage)
 
-    if (reviewAverage > 60) {
-        color = "bg-positive text-white"
-    } else if (reviewAverage > 40) {
-        color = "bg-passive"
-    } else {
-        color = "bg-negative text-white"
-    }
+    const totalReviews =
+        positiveReviewsCount + passiveReviewsCount + negativeReviewsCount
 
     return (
-        <Card className="relative h-[440px] w-[330px] overflow-hidden bg-gray-100">
+        <Card className="relative h-[440px] w-[330px] flex-shrink-0 overflow-hidden bg-gray-100">
             <div className={cn("h-[130px] w-full", color)} />
             <div className="absolute top-0 z-50 flex h-full flex-col gap-2 p-4">
                 <Link href="#" aria-label="">
                     <div className="flex h-[160px] w-full items-center justify-center overflow-hidden rounded-lg ">
                         <Image
-                            src={placeholder}
+                            src={image}
                             alt="placeholder"
                             width={300}
                             height={0}
@@ -48,16 +47,22 @@ function MovieCard({ reviewAverage }: MovieCardProps) {
                 </Link>
 
                 <Link href="#" aria-label="">
-                    <CardTitle className="text-pretty text-3xl font-extrabold">
-                        The Zone of Interest
+                    <CardTitle className="line-clamp-2 text-pretty text-3xl font-extrabold">
+                        {title}
                     </CardTitle>
                 </Link>
-                <div className="flex flex-wrap">
-                    <Link href={"#"} aria-label="3">
-                        <Badge className="rounded-sm border border-primary bg-transparent py-1 text-sm font-light tracking-wide text-primary hover:text-white">
-                            Horror
-                        </Badge>
-                    </Link>
+                <div className="flex flex-wrap gap-1">
+                    {categories.map((category) => (
+                        <Link
+                            href={"/categories/" + category}
+                            aria-label={category}
+                            key={category}
+                        >
+                            <Badge className="rounded-sm border border-primary bg-transparent py-1 text-sm font-light capitalize tracking-wide text-primary hover:text-white">
+                                {category}
+                            </Badge>
+                        </Link>
+                    ))}
                 </div>
             </div>
             <div className="absolute bottom-0 z-50 flex w-full flex-col gap-3 p-4">
@@ -67,12 +72,10 @@ function MovieCard({ reviewAverage }: MovieCardProps) {
                         <p className="text-sm uppercase tracking-widest text-muted-foreground">
                             SCORE
                         </p>
-                        <p className="text-lg font-semibold">
-                            Mixed or Average
-                        </p>
+                        <p className="text-lg font-semibold">{opinion}</p>
                         <Link href={"#"}>
                             <p className="test-sm font-thin hover:text-muted-foreground hover:underline">
-                                Based on 22 Critic Reviews
+                                Based on {totalReviews} reviews
                             </p>
                         </Link>
                     </div>
@@ -88,9 +91,10 @@ function MovieCard({ reviewAverage }: MovieCardProps) {
                     </Link>
                 </div>
                 <ReviewsBar
-                    positiveReviewsAmount={10}
-                    passiveReviewsAmount={100}
-                    negativeReviewsAmount={20}
+                    positiveReviewsAmount={positiveReviewsCount}
+                    passiveReviewsAmount={passiveReviewsCount}
+                    negativeReviewsAmount={negativeReviewsCount}
+                    totalReviews={totalReviews}
                 />
             </div>
         </Card>
