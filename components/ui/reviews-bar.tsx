@@ -4,44 +4,43 @@ interface ReviewsBarProps {
     positiveReviewsAmount: number
     passiveReviewsAmount: number
     negativeReviewsAmount: number
+    totalReviews: number
 }
 
 function ReviewsBar({
     positiveReviewsAmount,
     passiveReviewsAmount,
     negativeReviewsAmount,
+    totalReviews,
 }: ReviewsBarProps) {
-    const totalReviewsCount =
-        positiveReviewsAmount + passiveReviewsAmount + negativeReviewsAmount
-
     const negativePercent = Math.floor(
-        (negativeReviewsAmount / totalReviewsCount) * 100
+        (negativeReviewsAmount / totalReviews) * 100
     )
     const passivePercent = Math.floor(
-        (passiveReviewsAmount / totalReviewsCount) * 100
+        (passiveReviewsAmount / totalReviews) * 100
     )
     const positivePercent = Math.floor(
-        (positiveReviewsAmount / totalReviewsCount) * 100
+        (positiveReviewsAmount / totalReviews) * 100
     )
 
     return (
         <div
             className={cn(
-                "flex h-[8px] w-full gap-1 overflow-hidden rounded-full"
+                "flex h-[8px] w-full gap-1 overflow-hidden rounded-full bg-gray-300"
             )}
         >
             <div
-                className="bg-positive h-full w-full"
+                className="h-full w-full bg-positive"
                 style={{ width: `${positivePercent}%` }}
             />
             <div
-                className="bg-passive h-full w-full"
+                className="h-full w-full bg-passive"
                 style={{
                     width: `${passivePercent}%`,
                 }}
             />
             <div
-                className="bg-negative h-full w-full"
+                className="h-full w-full bg-negative"
                 style={{ width: `${negativePercent}%` }}
             />
         </div>

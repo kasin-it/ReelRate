@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Navigation } from "@/enums/navigation"
 
-import { buttonVariants } from "../ui/button"
+import { buttonVariants } from "@/components/ui/button"
 
 function AuthenticateButtons() {
     return (
