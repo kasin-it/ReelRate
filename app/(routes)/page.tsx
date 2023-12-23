@@ -5,6 +5,7 @@ import {
     getUpcomingMovies,
 } from "@/actions/get-movies"
 
+import { getMoviesListWithReviews } from "@/lib/utils"
 import Container from "@/components/ui/container"
 import ScrollMovies from "@/components/ui/scroll-movies"
 
@@ -13,6 +14,19 @@ export default async function Home() {
     const topRatedMoviesData = await getTopRatedMovies()
     const trandingMoviesData = await getTrendingMovies()
     const upcomingMoviesData = await getUpcomingMovies()
+
+    const playingNowMoviesList = await getMoviesListWithReviews(
+        playingNowMoviesData!
+    )
+    const topRatedMoviesList = await getMoviesListWithReviews(
+        topRatedMoviesData!
+    )
+    const trandingMoviesList = await getMoviesListWithReviews(
+        trandingMoviesData!
+    )
+    const upcomingMoviesList = await getMoviesListWithReviews(
+        upcomingMoviesData!
+    )
 
     return (
         <Container className="gap-10">

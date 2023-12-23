@@ -1,6 +1,11 @@
+import { getMovieKeywords } from "@/actions/get-keywords"
+import { getMovieReviews } from "@/actions/get-reviews"
 import { Opinions } from "@/enums/opinions"
+import { Movie } from "@/types"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+
+import { DataTMBD } from "@/types/tmbd"
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -25,4 +30,33 @@ export function getRating(value: number) {
     }
 
     return { color: color, opinion }
+}
+
+export async function getMoviesListWithReviews(
+    data: DataTMBD
+): Promise<Movie[]> {
+    const movies: Movie[] = []
+
+    for (const result of data.results) {
+        const movie_id = result.id.toString()
+        const keywordsData = await getMovieKeywords(movie_id)
+        const {
+            reviewAverage,
+            positiveReviewsCount,
+            passiveReviewsCount,
+            negativeReviewsCount,
+        } = await getMovieReviews(movie_id)
+
+        const movieWithKeywords: Movie = {
+            ...result,
+            keywords: keywordsData?.keywords,
+            reviewAverage,
+            positiveReviewsCount,
+            passiveReviewsCount,
+            negativeReviewsCount,
+        }
+        movies.push(movieWithKeywords)
+    }
+
+    return movies
 }

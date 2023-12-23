@@ -67,7 +67,7 @@ export async function getUpcomingMovies(page: number = 1) {
     }
 }
 
-export async function getMoviesByKeyword(keyword_id: number) {
+export async function getMoviesByKeyword(keyword_id: string) {
     try {
         const url = `https://api.themoviedb.org/3/trending/movie/${keyword_id}?language=en-US`
         const response: AxiosResponse = await axios.get(url, options)

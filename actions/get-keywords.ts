@@ -1,5 +1,7 @@
 import axios, { AxiosResponse } from "axios"
 
+import { KeywordsData } from "@/types/tmbd"
+
 interface Options {
     method: string
     headers: {
@@ -16,13 +18,12 @@ const options: Options = {
     },
 }
 
-export async function getMovieKeywords(
-    movie_id: number
-): Promise<AxiosResponse | null> {
+export async function getMovieKeywords(movie_id: string) {
     try {
         const url = `https://api.themoviedb.org/3/movie/${movie_id}/keywords`
-        const response: AxiosResponse = await axios.get(url, options)
-        return response
+        const response = await axios.get(url, options)
+        const data: KeywordsData = response.data
+        return data
     } catch (error) {
         console.error("Error fetching movie keywords:", error)
         return null

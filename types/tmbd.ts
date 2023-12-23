@@ -33,3 +33,13 @@ export enum OriginalLanguage {
     Ja = "ja",
     No = "no",
 }
+
+export interface KeywordsData {
+    id: number
+    keywords: Keyword[]
+}
+
+export interface Keyword {
+    id: number
+    name: string
+}

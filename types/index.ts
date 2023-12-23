@@ -1,15 +1,16 @@
+import { Keyword, Result } from "@/types/tmbd"
+
 export interface User {
+    user_id: string
     nickname: string
     name: string
     picture?: string
 }
 
-export interface Movie {
-    title: string
-    categories: string[]
+export interface Movie extends Result {
     reviewAverage: number
     positiveReviewsCount: number
     passiveReviewsCount: number
     negativeReviewsCount: number
-    image: string
+    keywords?: Keyword[]
 }
