@@ -1,7 +1,7 @@
 import { Keyword, Result } from "@/types/tmbd"
 
 export interface User {
-    user_id: string
+    user_id?: string
     nickname: string
     name: string
     picture?: string

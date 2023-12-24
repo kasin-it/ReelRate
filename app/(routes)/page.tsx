@@ -9,6 +9,8 @@ import { getMoviesListWithReviews } from "@/lib/utils"
 import Container from "@/components/ui/container"
 import ScrollMovies from "@/components/ui/scroll-movies"
 
+export const revalidate = 86400
+
 export default async function Home() {
     const playingNowMoviesData = await getPlayingNowMovies()
     const topRatedMoviesData = await getTopRatedMovies()
@@ -40,12 +42,21 @@ export default async function Home() {
                     </h2>
                 </div>
             </div>
-            {/* <ScrollMovies movies={MOVIES} heading="New Releases" />
             <ScrollMovies
-                movies={MOVIES}
-                heading="Upcoming Releases"
+                movies={topRatedMoviesList}
+                heading={"Top Rated ✨"}
+            />
+            <ScrollMovies
+                movies={playingNowMoviesList}
+                heading={"Playing Now 📺"}
                 smallCard={true}
-            /> */}
+            />
+            <ScrollMovies movies={trandingMoviesList} heading={"Tranding 📈"} />
+            <ScrollMovies
+                movies={upcomingMoviesList}
+                heading={"Upcoming 📨"}
+                smallCard={true}
+            />
         </Container>
     )
 }

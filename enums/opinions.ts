@@ -4,4 +4,5 @@ export enum Opinions {
     Mixed = "Mixed or Average",
     Bad = "Generally Unfavorable",
     VeryBad = "Overwhelming Dislike",
+    NA = "No opinions available",
 }

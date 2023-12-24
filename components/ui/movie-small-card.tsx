@@ -2,33 +2,50 @@ import Image from "next/image"
 import Link from "next/link"
 import { Movie } from "@/types"
 
-import { cn, getRating } from "@/lib/utils"
+import { cn, getImagePath, getMoviePath, getRating } from "@/lib/utils"
 
 interface MovieSmallCardProps {
     movie: Movie
 }
 
 function MovieSmallCard({
-    movie: { reviewAverage, title, image },
+    movie: {
+        reviewAverage,
+        passiveReviewsCount,
+        positiveReviewsCount,
+        negativeReviewsCount,
+        title,
+        poster_path,
+        id,
+    },
 }: MovieSmallCardProps) {
-    const { color, opinion } = getRating(reviewAverage)
+    const totalReviews =
+        passiveReviewsCount + positiveReviewsCount + negativeReviewsCount
+    const { color, opinion } = getRating(reviewAverage, totalReviews)
+    const image = getImagePath(poster_path)
+    const moviePath = getMoviePath(id.toString())
 
     return (
         <div className="flex h-[316px] w-[183px] flex-shrink-0 flex-col gap-1 overflow-hidden">
-            <div className="relative flex h-[244px] w-full overflow-hidden rounded-lg">
-                <Image
-                    src={image}
-                    alt="placeholder"
-                    fill
-                    className="object-cover"
-                />
-            </div>
-            <Link href="#" aria-label="">
+            <Link
+                href={moviePath}
+                aria-label={title}
+                className="flex flex-col gap-1"
+            >
+                <div className="relative flex h-[254px] w-full overflow-hidden rounded-lg">
+                    <Image
+                        src={image}
+                        alt="placeholder"
+                        fill
+                        className="object-cover"
+                        loading="eager"
+                    />
+                </div>
                 <h1 className=" line-clamp-1 text-xl font-extrabold underline hover:text-muted-foreground hover:no-underline">
                     {title}
                 </h1>
             </Link>
-            <Link href={"#"} aria-label="#">
+            <Link href={moviePath} aria-label={title}>
                 <div className="group flex items-center justify-start gap-1">
                     <div
                         className={cn(
@@ -36,7 +53,7 @@ function MovieSmallCard({
                             color
                         )}
                     >
-                        <p>{reviewAverage}</p>
+                        <p>{totalReviews === 0 ? "N/A" : reviewAverage}</p>
                     </div>
 
                     <p className="text-sm font-normal text-muted-foreground group-hover:underline">

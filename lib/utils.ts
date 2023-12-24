@@ -11,7 +11,7 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
 }
 
-export function getRating(value: number) {
+export function getRating(value: number, totalReviews: number) {
     let color = "bg-negative text-white"
     let opinion = Opinions.VeryBad
 
@@ -29,7 +29,22 @@ export function getRating(value: number) {
         opinion = Opinions.Bad
     }
 
+    if (totalReviews === 0) {
+        color = "bg-positive text-white"
+        opinion = Opinions.NA
+    }
+
     return { color: color, opinion }
+}
+
+export function getImagePath(fileName: string) {
+    const url = `https://image.tmdb.org/t/p/original${fileName}`
+    return url
+}
+
+export function getMoviePath(movieId: string) {
+    const url = `/movie/${movieId}`
+    return url
 }
 
 export async function getMoviesListWithReviews(
@@ -38,24 +53,44 @@ export async function getMoviesListWithReviews(
     const movies: Movie[] = []
 
     for (const result of data.results) {
-        const movie_id = result.id.toString()
-        const keywordsData = await getMovieKeywords(movie_id)
-        const {
-            reviewAverage,
-            positiveReviewsCount,
-            passiveReviewsCount,
-            negativeReviewsCount,
-        } = await getMovieReviews(movie_id)
+        const movieId = result.id.toString()
 
-        const movieWithKeywords: Movie = {
-            ...result,
-            keywords: keywordsData?.keywords,
-            reviewAverage,
-            positiveReviewsCount,
-            passiveReviewsCount,
-            negativeReviewsCount,
+        try {
+            const keywordsData = await getMovieKeywords(movieId)
+            const { success, data, error } = await getMovieReviews(movieId)
+
+            if (!success) {
+                console.error(
+                    `Failed to retrieve reviews for movie ${movieId}: ${
+                        error || "Unknown error"
+                    }`
+                )
+                continue
+            }
+
+            if (!data) {
+                continue
+            }
+
+            const {
+                review_average,
+                passive_reviews,
+                positive_reviews,
+                negative_reviews,
+            } = data
+
+            const movieWithKeywords: Movie = {
+                ...result,
+                keywords: keywordsData?.keywords,
+                reviewAverage: review_average,
+                positiveReviewsCount: positive_reviews,
+                passiveReviewsCount: passive_reviews,
+                negativeReviewsCount: negative_reviews,
+            }
+            movies.push(movieWithKeywords)
+        } catch (error) {
+            console.error(`Error processing movie ${movieId}: ${error}`)
         }
-        movies.push(movieWithKeywords)
     }
 
     return movies

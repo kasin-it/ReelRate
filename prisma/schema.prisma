@@ -7,3 +7,30 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
+
+model Movie {
+  movie_id         String       @id
+  review_average   Int          @default(0)
+  passive_reviews  Int          @default(0)
+  negative_reviews Int          @default(0)
+  positive_reviews Int          @default(0)
+  user_reviews     UserReview[]
+}
+
+model User {
+  user_id      String       @id
+  user_reviews UserReview[]
+}
+
+model UserReview {
+  review_id Int    @id @default(autoincrement())
+  movie_id  String
+  user_id   String
+  content   String
+  reviews   String
+  movie     Movie  @relation(fields: [movie_id], references: [movie_id])
+  user      User   @relation(fields: [user_id], references: [user_id])
+
+  @@index([user_id])
+  @@index([movie_id])
+}

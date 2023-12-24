@@ -22,15 +22,15 @@ function ScrollMovies({
             <Separator className="h-[2px]" />
             <div className="relative flex">
                 <section className="relative flex gap-3 overflow-x-scroll">
-                    {movies.map((movie, idx) =>
+                    {movies.map((movie) =>
                         smallCard ? (
-                            <MovieSmallCard movie={movie} key={idx} />
+                            <MovieSmallCard movie={movie} key={movie.id} />
                         ) : (
-                            <MovieCard movie={movie} key={idx} />
+                            <MovieCard movie={movie} key={movie.id} />
                         )
                     )}
                 </section>
-                <div className="absolute right-0 z-50 h-full w-10 bg-gradient-to-l from-white" />
+                <div className="absolute right-0 z-50 h-full w-5 bg-gradient-to-l from-white sm:w-10" />
             </div>
         </section>
     )

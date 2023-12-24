@@ -29,20 +29,24 @@ function ReviewsBar({
                 "flex h-[8px] w-full gap-1 overflow-hidden rounded-full bg-gray-300"
             )}
         >
-            <div
-                className="h-full w-full bg-positive"
-                style={{ width: `${positivePercent}%` }}
-            />
-            <div
-                className="h-full w-full bg-passive"
-                style={{
-                    width: `${passivePercent}%`,
-                }}
-            />
-            <div
-                className="h-full w-full bg-negative"
-                style={{ width: `${negativePercent}%` }}
-            />
+            {totalReviews === 0 ? null : (
+                <>
+                    <div
+                        className="h-full w-full bg-positive"
+                        style={{ width: `${positivePercent}%` }}
+                    />
+                    <div
+                        className="h-full w-full bg-passive"
+                        style={{
+                            width: `${passivePercent}%`,
+                        }}
+                    />
+                    <div
+                        className="h-full w-full bg-negative"
+                        style={{ width: `${negativePercent}%` }}
+                    />
+                </>
+            )}
         </div>
     )
 }

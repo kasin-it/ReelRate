@@ -62,14 +62,14 @@ export async function getUpcomingMovies(page: number = 1) {
         const data: DataTMBD = response.data
         return data
     } catch (error) {
-        console.error("Error fetching now playing movies:", error)
+        console.error("Error fetching upcoming movies:", error)
         return null
     }
 }
 
-export async function getMoviesByKeyword(keyword_id: string) {
+export async function getMoviesByKeyword(keywordId: string) {
     try {
-        const url = `https://api.themoviedb.org/3/trending/movie/${keyword_id}?language=en-US`
+        const url = `https://api.themoviedb.org/3/trending/movie/${keywordId}?language=en-US`
         const response: AxiosResponse = await axios.get(url, options)
         const data: DataTMBD = response.data
         return data
@@ -82,6 +82,18 @@ export async function getMoviesByKeyword(keyword_id: string) {
 export async function getMoviesByQuery(query: string) {
     try {
         const url = `https://api.themoviedb.org/3/search/movie?query=${query}include_adult=false&language=en-US&page=1`
+        const response: AxiosResponse = await axios.get(url, options)
+        const data: DataTMBD = response.data
+        return data
+    } catch (error) {
+        console.error("Error fetching movies by query:", error)
+        return null
+    }
+}
+
+export async function getMovieById(movieId: string) {
+    try {
+        const url = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`
         const response: AxiosResponse = await axios.get(url, options)
         const data: DataTMBD = response.data
         return data
