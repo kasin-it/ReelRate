@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import { getMovieById } from "@/actions/get-movies"
 
-import { getMoviesListWithReviews } from "@/lib/utils"
+import { getMoviesListWithReviews, getMovieWithReviews } from "@/lib/utils"
 
 interface MoviePageProps {
     params: { movieId: string }
@@ -14,9 +14,11 @@ async function MoviePage({ params: { movieId } }: MoviePageProps) {
         return notFound()
     }
 
-    const movieList = getMoviesListWithReviews(movieData)
+    const movie = await getMovieWithReviews(movieData)
 
-    const movie = movieData.results[0]
+    if (!movie) {
+        return notFound()
+    }
 
     return <div>{movie.title}</div>
 }

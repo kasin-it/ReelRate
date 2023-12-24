@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios"
 
-import { DataTMBD } from "@/types/tmbd"
+import { DataTMDB, SingleDataTMDB } from "@/types/tmdb"
 
 interface Options {
     method: string
@@ -22,7 +22,7 @@ export async function getTrendingMovies(timeWindow: "day" | "week" = "day") {
     try {
         const url = `https://api.themoviedb.org/3/trending/movie/${timeWindow}?language=en-US`
         const response: AxiosResponse = await axios.get(url, options)
-        const data: DataTMBD = response.data
+        const data: DataTMDB = response.data
         return data
     } catch (error) {
         console.error("Error fetching trending movies:", error)
@@ -34,7 +34,7 @@ export async function getPlayingNowMovies(page: number = 1) {
     try {
         const url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=${page}`
         const response: AxiosResponse = await axios.get(url, options)
-        const data: DataTMBD = response.data
+        const data: DataTMDB = response.data
         return data
     } catch (error) {
         console.error("Error fetching now playing movies:", error)
@@ -46,7 +46,7 @@ export async function getTopRatedMovies(page: number = 1) {
     try {
         const url = `https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=${page}`
         const response: AxiosResponse = await axios.get(url, options)
-        const data: DataTMBD = response.data
+        const data: DataTMDB = response.data
         return data
     } catch (error) {
         console.error("Error fetching top rated movies:", error)
@@ -59,7 +59,7 @@ export async function getUpcomingMovies(page: number = 1) {
         const url = `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=${page}`
 
         const response: AxiosResponse = await axios.get(url, options)
-        const data: DataTMBD = response.data
+        const data: DataTMDB = response.data
         return data
     } catch (error) {
         console.error("Error fetching upcoming movies:", error)
@@ -71,7 +71,7 @@ export async function getMoviesByKeyword(keywordId: string) {
     try {
         const url = `https://api.themoviedb.org/3/trending/movie/${keywordId}?language=en-US`
         const response: AxiosResponse = await axios.get(url, options)
-        const data: DataTMBD = response.data
+        const data: DataTMDB = response.data
         return data
     } catch (error) {
         console.error("Error fetching movies by keyword:", error)
@@ -83,7 +83,7 @@ export async function getMoviesByQuery(query: string) {
     try {
         const url = `https://api.themoviedb.org/3/search/movie?query=${query}include_adult=false&language=en-US&page=1`
         const response: AxiosResponse = await axios.get(url, options)
-        const data: DataTMBD = response.data
+        const data: DataTMDB = response.data
         return data
     } catch (error) {
         console.error("Error fetching movies by query:", error)
@@ -95,7 +95,7 @@ export async function getMovieById(movieId: string) {
     try {
         const url = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`
         const response: AxiosResponse = await axios.get(url, options)
-        const data: DataTMBD = response.data
+        const data: SingleDataTMDB = response.data
         return data
     } catch (error) {
         console.error("Error fetching movies by keyword:", error)

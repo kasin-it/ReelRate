@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios"
 
-import { KeywordsData } from "@/types/tmbd"
+import { KeywordsData } from "@/types/tmdb"
 
 interface Options {
     method: string

@@ -26,7 +26,10 @@ function MovieCard({
 }: MovieCardProps) {
     const totalReviews =
         positiveReviewsCount + passiveReviewsCount + negativeReviewsCount
-    const { color, opinion } = getRating(reviewAverage, totalReviews)
+    const { color, opinion, reviewAverageValue } = getRating(
+        reviewAverage,
+        totalReviews
+    )
     const image = getImagePath(backdrop_path)
 
     const keywords_sliced = keywords?.slice(0, 3)
@@ -91,7 +94,7 @@ function MovieCard({
                                 color
                             )}
                         >
-                            <p>{reviewAverage}</p>
+                            <p>{reviewAverageValue}</p>
                         </div>
                     </Link>
                 </div>
