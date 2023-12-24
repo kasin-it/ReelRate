@@ -19,5 +19,4 @@ export interface MovieDetails extends SingleDataTMDB {
     positiveReviewsCount: number
     passiveReviewsCount: number
     negativeReviewsCount: number
-    keywords?: Keyword[]
 }

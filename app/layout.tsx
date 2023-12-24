@@ -5,6 +5,7 @@ import "./globals.css"
 
 import { UserProvider } from "@auth0/nextjs-auth0/client"
 
+import Footer from "@/components/Footer/footer"
 import Navbar from "@/components/Navbar/navbar"
 import TailwindIndicator from "@/components/tailwind-indicator"
 
@@ -30,6 +31,7 @@ export default function RootLayout({
                 <body className={font.className}>
                     <Navbar />
                     {children}
+                    <Footer />
                     <TailwindIndicator />
                 </body>
             </UserProvider>
