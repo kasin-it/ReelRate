@@ -1,5 +1,14 @@
+"use client"
+
 import { Movie } from "@/types"
 
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel"
 import MovieCard from "@/components/ui/movie-card"
 import { Separator } from "@/components/ui/separator"
 
@@ -18,19 +27,32 @@ function ScrollMovies({
 }: ScrollMoviesProps) {
     return (
         <section className="flex w-full flex-col gap-5">
-            <h1 className="text-2xl font-bold tracking-wide">{heading}</h1>
+            <h1 className="text-3xl font-bold tracking-wide">{heading}</h1>
             <Separator className="h-[2px]" />
-            <div className="relative flex">
-                <section className="relative flex gap-3 overflow-x-scroll">
-                    {movies.map((movie) =>
-                        smallCard ? (
-                            <MovieSmallCard movie={movie} key={movie.id} />
-                        ) : (
-                            <MovieCard movie={movie} key={movie.id} />
-                        )
-                    )}
-                </section>
-                <div className="absolute right-0 z-50 h-full w-5 bg-gradient-to-l from-white sm:w-10" />
+            <div className="md:px-5 xl:px-10 ">
+                <Carousel>
+                    <CarouselContent>
+                        {movies.map((movie) =>
+                            smallCard ? (
+                                <CarouselItem
+                                    key={movie.id}
+                                    className="basis-1/7"
+                                >
+                                    <MovieSmallCard movie={movie} />
+                                </CarouselItem>
+                            ) : (
+                                <CarouselItem
+                                    key={movie.id}
+                                    className="basis-1/7"
+                                >
+                                    <MovieCard movie={movie} key={movie.id} />
+                                </CarouselItem>
+                            )
+                        )}
+                    </CarouselContent>
+                    <CarouselPrevious className="hidden md:inline-flex" />
+                    <CarouselNext className="hidden md:inline-flex" />
+                </Carousel>
             </div>
         </section>
     )

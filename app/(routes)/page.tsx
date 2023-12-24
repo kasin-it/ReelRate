@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic"
 import {
     getPlayingNowMovies,
     getTopRatedMovies,
@@ -7,7 +8,10 @@ import {
 
 import { getMoviesListWithReviews } from "@/lib/utils"
 import Container from "@/components/ui/container"
-import ScrollMovies from "@/components/ui/scroll-movies"
+
+const ScrollMovies = dynamic(() => import("@/components/ui/scroll-movies"), {
+    ssr: true,
+})
 
 export const revalidate = 86400
 
