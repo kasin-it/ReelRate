@@ -1,15 +1,10 @@
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { getMovieById } from "@/actions/get-movies"
+import { getMovieIds } from "@/actions/get-reviews"
 import { Bookmark, Heart, List, Star } from "lucide-react"
 
-import {
-    cn,
-    getImagePath,
-    getMoviePath,
-    getMovieWithReviews,
-    getRating,
-} from "@/lib/utils"
+import { cn, getImagePath, getMovieWithReviews, getRating } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import Container from "@/components/ui/container"
 import ReviewsBar from "@/components/ui/reviews-bar"
@@ -19,6 +14,24 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+
+export const revalidate = 84400
+
+export async function generateStaticParams() {
+    try {
+        const res = await getMovieIds()
+
+        return (
+            res.data?.map(({ movie_id }: { movie_id: string }) => ({
+                movieId: movie_id,
+            })) || []
+        )
+    } catch (error) {
+        // Handle errors or return an empty array based on your use case
+        console.error("Error fetching movie IDs:", error)
+        return []
+    }
+}
 
 interface MoviePageProps {
     params: { movieId: string }
@@ -48,7 +61,6 @@ async function MoviePage({ params: { movieId } }: MoviePageProps) {
         movie.reviewAverage,
         totalReviews
     )
-    const moviePath = getMoviePath(movie.id.toString())
 
     return (
         <Container>
@@ -59,6 +71,8 @@ async function MoviePage({ params: { movieId } }: MoviePageProps) {
                     width={400}
                     height={400}
                     className="rounded-lg"
+                    priority={true}
+                    loading="eager"
                 />
                 <div className="flex w-full max-w-md flex-col items-start gap-5 pt-10">
                     <h1 className="text-pretty text-5xl font-bold">

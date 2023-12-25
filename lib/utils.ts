@@ -54,7 +54,9 @@ export function getMoviePath(movieId: string) {
     return url
 }
 
-export async function getMovieWithReviews(movieData: SingleDataTMDB) {
+export async function getMovieWithReviews(
+    movieData: SingleDataTMDB
+): Promise<MovieDetails | undefined> {
     const movieId = movieData.id.toString()
 
     try {
@@ -66,11 +68,11 @@ export async function getMovieWithReviews(movieData: SingleDataTMDB) {
                     error || "Unknown error"
                 }`
             )
-            return
+            return undefined
         }
 
         if (!data) {
-            return
+            return undefined
         }
 
         const {
@@ -87,9 +89,11 @@ export async function getMovieWithReviews(movieData: SingleDataTMDB) {
             passiveReviewsCount: passive_reviews,
             negativeReviewsCount: negative_reviews,
         }
+
         return movieWithReviews
     } catch (error) {
         console.error(`Error processing movie ${movieId}: ${error}`)
+        return undefined
     }
 }
 
@@ -105,16 +109,12 @@ export async function getMoviesListWithReviews(
             const keywordsData = await getMovieKeywords(movieId)
             const { success, data, error } = await getMovieReviews(movieId)
 
-            if (!success) {
+            if (!success || !data) {
                 console.error(
                     `Failed to retrieve reviews for movie ${movieId}: ${
                         error || "Unknown error"
                     }`
                 )
-                continue
-            }
-
-            if (!data) {
                 continue
             }
 
@@ -133,6 +133,7 @@ export async function getMoviesListWithReviews(
                 passiveReviewsCount: passive_reviews,
                 negativeReviewsCount: negative_reviews,
             }
+
             movies.push(movieWithKeywords)
         } catch (error) {
             console.error(`Error processing movie ${movieId}: ${error}`)
