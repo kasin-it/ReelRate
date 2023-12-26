@@ -8,6 +8,7 @@ import { cn, getImagePath, getMovieWithReviews, getRating } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import Container from "@/components/ui/container"
 import ReviewsBar from "@/components/ui/reviews-bar"
+import { Separator } from "@/components/ui/separator"
 import {
     Tooltip,
     TooltipContent,
@@ -15,9 +16,12 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 
+import MovieRatings from "./components/movie-ratings"
+import ScoreMovieInput from "./components/score-movie-input"
+
 export const revalidate = 84400
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<any[]> {
     try {
         const res = await getMovieIds()
 
@@ -27,7 +31,6 @@ export async function generateStaticParams() {
             })) || []
         )
     } catch (error) {
-        // Handle errors or return an empty array based on your use case
         console.error("Error fetching movie IDs:", error)
         return []
     }
@@ -63,13 +66,14 @@ async function MoviePage({ params: { movieId } }: MoviePageProps) {
     )
 
     return (
-        <Container>
+        <Container className="flexz max-w-4xl flex-col gap-5">
             <div className="flex justify-center gap-10">
                 <Image
                     src={image}
                     alt={movie.title}
                     width={400}
-                    height={400}
+                    height={0}
+                    style={{ height: "auto" }}
                     className="rounded-lg"
                     priority={true}
                     loading="eager"
@@ -99,7 +103,7 @@ async function MoviePage({ params: { movieId } }: MoviePageProps) {
                                 SCORE
                             </p>
                             <p className="text-lg font-semibold">{opinion}</p>
-                            <p className="test-sm font-thin hover:text-muted-foreground hover:underline">
+                            <p className="test-sm font-thin">
                                 Based on {totalReviews} reviews
                             </p>
                         </div>
@@ -164,6 +168,10 @@ async function MoviePage({ params: { movieId } }: MoviePageProps) {
                     </div>
                 </div>
             </div>
+            <Separator />
+            <ScoreMovieInput />
+            <Separator />
+            <MovieRatings />
         </Container>
     )
 }

@@ -5,6 +5,7 @@ import "./globals.css"
 
 import { UserProvider } from "@auth0/nextjs-auth0/client"
 
+import { Toaster } from "@/components/ui/toaster"
 import Footer from "@/components/Footer/footer"
 import Navbar from "@/components/Navbar/navbar"
 import TailwindIndicator from "@/components/tailwind-indicator"
@@ -33,6 +34,7 @@ export default function RootLayout({
                     {children}
                     <Footer />
                     <TailwindIndicator />
+                    <Toaster />
                 </body>
             </UserProvider>
         </html>

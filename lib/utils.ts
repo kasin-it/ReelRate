@@ -27,9 +27,9 @@ export function getRating(reviewAverage: number, totalReviews: number) {
     } else if (reviewAverage > 6) {
         opinion = Opinions.Good
         color = "bg-positive text-white"
-    } else if (reviewAverage > 4) {
+    } else if (reviewAverage > 3) {
         opinion = Opinions.Mixed
-        color = "bg-passive"
+        color = "bg-passive text-black"
     } else if (reviewAverage > 1) {
         color = "bg-negative text-white"
         opinion = Opinions.Bad
