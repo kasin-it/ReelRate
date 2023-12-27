@@ -18,7 +18,7 @@ function MovieRatings() {
             <h1 className="text-2xl">Ratings</h1>
 
             <article className="flex flex-col gap-5">
-                <RatingCard />
+                {/* <RatingCard /> */}
             </article>
             {/* <Pagination>
                 <PaginationContent>

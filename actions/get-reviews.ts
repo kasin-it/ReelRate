@@ -54,3 +54,24 @@ export async function getMovieReviews(movie_id: string) {
         }
     }
 }
+
+export async function getUserMovieReview(movie_id: string, user_id: string) {
+    try {
+        const movie = await prisma.userReview.findFirst({
+            where: {
+                movie_id,
+                user_id,
+            },
+        })
+
+        return {
+            success: true,
+            data: movie,
+        }
+    } catch (error) {
+        return {
+            success: false,
+            error: error,
+        }
+    }
+}

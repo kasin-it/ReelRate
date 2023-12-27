@@ -1,12 +1,10 @@
+import { useState } from "react"
 import { useParams } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
 import axios from "axios"
-import { SubmitHandler, useForm } from "react-hook-form"
-import z from "zod"
+import { useForm } from "react-hook-form"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 
@@ -15,30 +13,32 @@ interface RateForm {
     index: number
 }
 
-const formSchema = z.object({
-    content: z.string().max(512),
-    rating: z.number().min(0).max(10),
-    movieId: z.string().min(1).max(100),
-})
-
-type FormData = z.infer<typeof formSchema>
-
 function RateForm({ color, index }: RateForm) {
     const {
-        register,
         handleSubmit,
         formState: { isSubmitting },
-    } = useForm<FormData>({
-        resolver: zodResolver(formSchema),
+    } = useForm({
         mode: "onSubmit",
         reValidateMode: "onSubmit",
     })
     const { toast } = useToast()
     const { movieId } = useParams()
+    const [content, setContent] = useState("")
 
-    const onSubmit = async (data: FormData) => {
+    const handleContentChange = (value: string) => {
+        setContent(value)
+    }
+
+    const onSubmit = async () => {
+        const data = {
+            movieId,
+            rating: index,
+            content,
+            index,
+        }
+
         try {
-            const res = await axios.post("/api/reviews", data)
+            await axios.post("/api/reviews", data)
             toast({
                 title: "Your review has been successfully posted!",
             })
@@ -58,22 +58,8 @@ function RateForm({ color, index }: RateForm) {
                     rows={5}
                     placeholder="Share with us your opinion!"
                     className=" focus-visible:ring-0"
-                    id="content"
-                    {...register("content")}
-                    disabled={isSubmitting}
-                />
-                <Input
-                    value={index}
-                    {...register("rating", {
-                        valueAsNumber: true,
-                    })}
-                    className="hidden"
-                    disabled={isSubmitting}
-                />
-                <Input
-                    value={movieId}
-                    {...register("movieId")}
-                    className="hidden"
+                    value={content}
+                    onChange={(e) => handleContentChange(e.target.value)}
                     disabled={isSubmitting}
                 />
             </div>
