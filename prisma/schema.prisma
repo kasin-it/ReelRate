@@ -19,17 +19,19 @@ model Movie {
 
 model User {
   user_id      String       @id
+  createdAt    DateTime     @default(now())
   user_reviews UserReview[]
 }
 
 model UserReview {
-  review_id Int    @id @default(autoincrement())
+  review_id Int      @id @default(autoincrement())
   movie_id  String
   user_id   String
   content   String
-  reviews   String
-  movie     Movie  @relation(fields: [movie_id], references: [movie_id])
-  user      User   @relation(fields: [user_id], references: [user_id])
+  rating    Int
+  createdAt DateTime @default(now())
+  movie     Movie    @relation(fields: [movie_id], references: [movie_id])
+  user      User     @relation(fields: [user_id], references: [user_id])
 
   @@index([user_id])
   @@index([movie_id])

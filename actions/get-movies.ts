@@ -1,3 +1,5 @@
+"use server"
+
 import axios, { AxiosResponse } from "axios"
 
 import { DataTMDB, SingleDataTMDB } from "@/types/tmdb"
@@ -98,7 +100,7 @@ export async function getMovieById(movieId: string) {
         const data: SingleDataTMDB = response.data
         return data
     } catch (error) {
-        console.error("Error fetching movies by keyword:", error)
+        console.error("Error fetching movies by id:", error)
         return null
     }
 }

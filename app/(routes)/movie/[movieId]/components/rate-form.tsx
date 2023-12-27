@@ -1,4 +1,6 @@
+import { useParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
+import axios from "axios"
 import { SubmitHandler, useForm } from "react-hook-form"
 import z from "zod"
 
@@ -14,38 +16,40 @@ interface RateForm {
 }
 
 const formSchema = z.object({
-    rating: z.string(),
     content: z.string().max(512),
+    rating: z.number().min(0).max(10),
+    movieId: z.string().min(1).max(100),
 })
 
-type FormSchema = z.infer<typeof formSchema>
+type FormData = z.infer<typeof formSchema>
 
 function RateForm({ color, index }: RateForm) {
     const {
         register,
         handleSubmit,
-        formState: { errors, isLoading },
-    } = useForm<FormSchema>({
+        formState: { isSubmitting },
+    } = useForm<FormData>({
         resolver: zodResolver(formSchema),
+        mode: "onSubmit",
+        reValidateMode: "onSubmit",
     })
-    // const { toast } = useToast()
-    const onSubmit: SubmitHandler<FormSchema> = (data) => {
-        console.log(data)
-    }
+    const { toast } = useToast()
+    const { movieId } = useParams()
 
-    // if (errors.content) {
-    //     toast({
-    //         variant: "destructive",
-    //         title: "Uh oh! Something went wrong.",
-    //         description: errors.content.message,
-    //     })
-    // } else if (errors.rating) {
-    //     toast({
-    //         variant: "destructive",
-    //         title: "Uh oh! Something went wrong.",
-    //         description: errors.rating.message,
-    //     })
-    // }
+    const onSubmit = async (data: FormData) => {
+        try {
+            const res = await axios.post("/api/reviews", data)
+            toast({
+                title: "Your review has been successfully posted!",
+            })
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "An unexpected error occurred. Please try again later.",
+            })
+            console.error(error)
+        }
+    }
 
     return (
         <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
@@ -56,22 +60,27 @@ function RateForm({ color, index }: RateForm) {
                     className=" focus-visible:ring-0"
                     id="content"
                     {...register("content")}
-                    disabled={isLoading}
+                    disabled={isSubmitting}
                 />
                 <Input
-                    className="hidden"
-                    id="rating"
-                    type="number"
-                    defaultValue={index}
                     value={index}
-                    {...register("rating")}
-                    disabled={isLoading}
+                    {...register("rating", {
+                        valueAsNumber: true,
+                    })}
+                    className="hidden"
+                    disabled={isSubmitting}
+                />
+                <Input
+                    value={movieId}
+                    {...register("movieId")}
+                    className="hidden"
+                    disabled={isSubmitting}
                 />
             </div>
             <Button
                 className={cn("hover:bg- hover:opacity-80", color)}
                 type="submit"
-                disabled={isLoading}
+                disabled={isSubmitting}
             >
                 Submit
             </Button>

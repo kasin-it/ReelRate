@@ -4,6 +4,7 @@ import { Akshar } from "next/font/google"
 import "./globals.css"
 
 import { UserProvider } from "@auth0/nextjs-auth0/client"
+import { QueryClient, QueryClientProvider } from "react-query"
 
 import { Toaster } from "@/components/ui/toaster"
 import Footer from "@/components/Footer/footer"

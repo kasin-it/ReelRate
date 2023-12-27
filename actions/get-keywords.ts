@@ -1,3 +1,5 @@
+"use server"
+
 import axios, { AxiosResponse } from "axios"
 
 import { KeywordsData } from "@/types/tmdb"
