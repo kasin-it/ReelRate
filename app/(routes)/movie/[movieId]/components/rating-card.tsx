@@ -17,7 +17,7 @@ function RatingCard({ review, author }: RatingCard) {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-5">
                         <div className="flex size-16 items-center justify-center rounded-md bg-green-600 text-white">
-                            {/* <p>{review.rating}</p> */}
+                            <p>{review.rating}</p>
                         </div>
                         <h1>{author}</h1>
                     </div>
@@ -27,7 +27,7 @@ function RatingCard({ review, author }: RatingCard) {
                 </div>
             </CardTitle>
             <CardDescription className="text-lg">
-                {/* {review.content} */}
+                {review.content}
             </CardDescription>
         </Card>
     )

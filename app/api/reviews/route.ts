@@ -21,19 +21,17 @@ async function validateRatingData(
 
 export async function GET(req: Request) {
     const session = await getSession()
+    const { searchParams } = new URL(req.url)
+    const movieId = searchParams.get("movieId")
 
     if (!session) {
         console.error("UNAUTHORIZED")
         return new NextResponse("UNAUTHORIZED", { status: 401 })
     }
 
-    const ratingSchema = z.object({
-        movieId: z.string().min(1).max(100),
-    })
-
-    const data = await req.json()
-
-    await validateRatingData(data, ratingSchema)
+    if (!movieId) {
+        return new NextResponse("Bad request", { status: 500 })
+    }
 
     try {
         const user = await getUser(session.user.sid)
@@ -42,9 +40,13 @@ export async function GET(req: Request) {
             return new NextResponse("Internal error", { status: 500 })
         }
 
-        const userReview = getUserMovieReview(data.movieId, session.user.usid)
+        const userReview = await getUserMovieReview(movieId, session.user.sid)
 
-        return Response.json(userReview)
+        if (userReview.success) {
+            return Response.json(userReview.data)
+        } else {
+            return Response.json(null)
+        }
     } catch (error) {
         console.error("Internal error: ", error)
         return new NextResponse("Internal error", { status: 500 })

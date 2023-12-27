@@ -18,6 +18,7 @@ import {
 
 import MovieRatings from "./components/movie-ratings"
 import ScoreMovieInput from "./components/score-movie-input"
+import MyScore from "./components/my-score"
 
 export const revalidate = 84400
 
@@ -169,7 +170,7 @@ async function MoviePage({ params: { movieId } }: MoviePageProps) {
                 </div>
             </div>
             <Separator />
-            <ScoreMovieInput />
+            <MyScore />
             <Separator />
             <MovieRatings />
         </Container>
