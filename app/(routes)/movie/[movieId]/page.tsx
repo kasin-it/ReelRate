@@ -1,7 +1,7 @@
+import dynamic from "next/dynamic"
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { getMovieById } from "@/actions/get-movies"
-import { getMovieIds } from "@/actions/get-reviews"
+import { getMovieById, getMovieIds } from "@/actions/get-movies"
 import { Bookmark, Heart, List, Star } from "lucide-react"
 
 import { cn, getImagePath, getMovieWithReviews, getRating } from "@/lib/utils"
@@ -17,17 +17,20 @@ import {
 } from "@/components/ui/tooltip"
 
 import MovieRatings from "./components/movie-ratings"
-import ScoreMovieInput from "./components/score-movie-input"
-import MyScore from "./components/my-score"
+
+const MyScore = dynamic(() => import("./components/my-score"), {
+    loading: () => <p>Loading...</p>,
+    ssr: true,
+})
 
 export const revalidate = 84400
 
 export async function generateStaticParams(): Promise<any[]> {
     try {
-        const res = await getMovieIds()
+        const { movies, error } = await getMovieIds()
 
         return (
-            res.data?.map(({ movie_id }: { movie_id: string }) => ({
+            movies?.map(({ movie_id }: { movie_id: string }) => ({
                 movieId: movie_id,
             })) || []
         )
@@ -170,7 +173,7 @@ async function MoviePage({ params: { movieId } }: MoviePageProps) {
                 </div>
             </div>
             <Separator />
-            <MyScore />
+            <MyScore movieId={movieId} />
             <Separator />
             <MovieRatings />
         </Container>

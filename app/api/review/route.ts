@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getUserMovieReview } from "@/actions/get-reviews"
+import { getUserMovieReview } from "@/actions/get-rewiew"
 import { getUser } from "@/actions/get-user"
 import { postReview } from "@/actions/post-review"
 import { getSession } from "@auth0/nextjs-auth0"
@@ -40,10 +40,13 @@ export async function GET(req: Request) {
             return new NextResponse("Internal error", { status: 500 })
         }
 
-        const userReview = await getUserMovieReview(movieId, session.user.sid)
+        const { error, review } = await getUserMovieReview(
+            movieId,
+            session.user.sid
+        )
 
-        if (userReview.success) {
-            return Response.json(userReview.data)
+        if (review) {
+            return Response.json(review)
         } else {
             return Response.json(null)
         }

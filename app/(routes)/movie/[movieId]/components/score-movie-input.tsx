@@ -61,7 +61,11 @@ function RatingButton({
     )
 }
 
-function ScoreMovieInput() {
+interface ScoreMovieInputProps {
+    authorized: boolean
+}
+
+function ScoreMovieInput({ authorized }: ScoreMovieInputProps) {
     const {
         opinion,
         currentIndex,
@@ -71,7 +75,6 @@ function ScoreMovieInput() {
         handleOnMouseLeave,
         handleClickRating,
     } = useRating()
-    const session = useUser()
 
     const SCORE_LENGTH = 11
     const showForm = selectedIndex !== null
@@ -102,7 +105,7 @@ function ScoreMovieInput() {
                             handleOnMouseOver={handleOnMouseOver}
                             handleOnMouseLeave={handleOnMouseLeave}
                             handleClickRating={handleClickRating}
-                            isAuthenticated={session.user !== undefined}
+                            isAuthenticated={authorized}
                         />
                     ))}
                 </div>

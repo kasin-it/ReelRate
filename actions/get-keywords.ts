@@ -1,33 +1,38 @@
-"use server"
-
 import axios, { AxiosResponse } from "axios"
 
 import { KeywordsData } from "@/types/tmdb"
 
-interface Options {
+interface RequestOptions {
     method: string
-    headers: {
-        accept: string
-        Authorization: string
-    }
 }
 
-const options: Options = {
-    method: "GET",
-    headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${process.env.TMBD_ACCES_READ_KEY || ""}`,
-    },
+const TMDB_API_BASE_URL = "https://api.themoviedb.org/3"
+
+async function requestTMDB(
+    url: string,
+    options: RequestOptions = {
+        method: "GET",
+    }
+) {
+    try {
+        const response: AxiosResponse = await axios({
+            url: `${TMDB_API_BASE_URL}${url}`,
+            method: options.method,
+            headers: {
+                accept: "application/json",
+                Authorization: `Bearer ${
+                    process.env.TMBD_ACCES_READ_KEY || ""
+                }`,
+            },
+        })
+
+        return response.data
+    } catch (error) {
+        console.error(`Error fetching TMDB data from ${url}:`, error)
+        return null
+    }
 }
 
 export async function getMovieKeywords(movie_id: string) {
-    try {
-        const url = `https://api.themoviedb.org/3/movie/${movie_id}/keywords`
-        const response = await axios.get(url, options)
-        const data: KeywordsData = response.data
-        return data
-    } catch (error) {
-        console.error("Error fetching movie keywords:", error)
-        return null
-    }
+    return requestTMDB(`/movie/${movie_id}/keywords`)
 }

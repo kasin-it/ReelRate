@@ -2,21 +2,23 @@ import prisma from "@/lib/prisma"
 
 export async function getUser(userId: string) {
     try {
-        const user =
-            (await prisma.user.findFirst({
-                where: {
-                    user_id: userId,
-                },
-            })) ||
-            (await prisma.user.create({
+        let user = await prisma.user.findFirst({
+            where: {
+                user_id: userId,
+            },
+        })
+
+        if (!user) {
+            user = await prisma.user.create({
                 data: {
                     user_id: userId,
                 },
-            }))
+            })
+        }
 
-        return userId
+        return user
     } catch (error) {
-        console.error(error)
+        console.error("Error fetching or creating user:", error)
         return null
     }
 }

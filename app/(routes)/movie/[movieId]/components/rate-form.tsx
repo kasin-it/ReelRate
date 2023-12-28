@@ -39,7 +39,7 @@ function RateForm({ color, index }: RateForm) {
         }
 
         try {
-            await axios.post("/api/reviews", data)
+            await axios.post("/api/review", data)
             toast({
                 title: "Your review has been successfully posted!",
             })

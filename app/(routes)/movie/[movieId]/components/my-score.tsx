@@ -1,49 +1,38 @@
-"use client"
-
-import { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
-import { useUser } from "@auth0/nextjs-auth0/client"
-import { UserReview } from "@prisma/client"
-import axios from "axios"
+import dynamic from "next/dynamic"
+import { getUserMovieReview } from "@/actions/get-rewiew"
+import { getSession } from "@auth0/nextjs-auth0"
 
 import RatingCard from "./rating-card"
-import ScoreMovieInput from "./score-movie-input"
 
-const API_ENDPOINT = "/api/reviews"
+const ScoreMovieInput = dynamic(() => import("./score-movie-input"), {
+    loading: () => <p>Loading...</p>,
+    ssr: false,
+})
 
-function MyScore() {
-    const [myScore, setMyScore] = useState<UserReview | null>(null)
-    const { movieId } = useParams()
-    const session = useUser()
+interface MyScoreProps {
+    movieId: string
+}
 
-    useEffect(() => {
-        const getMyScore = async () => {
-            try {
-                const res = await axios.get(API_ENDPOINT, {
-                    params: { movieId },
-                })
+async function MyScore({ movieId }: MyScoreProps) {
+    const session = await getSession()
 
-                console.log(res.data)
+    if (!session) {
+        return <ScoreMovieInput authorized={false} />
+    }
 
-                setMyScore(res.data)
-            } catch (error) {
-                console.error(error)
-            }
-        }
+    const { error, review } = await getUserMovieReview(
+        movieId,
+        session?.user?.sid
+    )
 
-        getMyScore()
-    }, [movieId])
+    if (!review) {
+        return <ScoreMovieInput authorized={true} />
+    }
 
     return (
         <>
-            {myScore ? (
-                <RatingCard
-                    review={myScore}
-                    author={session?.user?.nickname as string}
-                />
-            ) : (
-                <ScoreMovieInput />
-            )}
+            <h1 className="text-2xl">My Score</h1>
+            <RatingCard review={review} author={session.user.nickname} />
         </>
     )
 }

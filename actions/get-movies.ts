@@ -1,106 +1,82 @@
-"use server"
-
 import axios, { AxiosResponse } from "axios"
 
 import { DataTMDB, SingleDataTMDB } from "@/types/tmdb"
+import prisma from "@/lib/prisma"
 
-interface Options {
+interface RequestOptions {
     method: string
-    headers: {
-        accept: string
-        Authorization: string
-    }
+    params?: Record<string, string | number>
 }
 
-const options: Options = {
-    method: "GET",
-    headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${process.env.TMBD_ACCES_READ_KEY || ""}`,
-    },
+const TMDB_API_BASE_URL = "https://api.themoviedb.org/3"
+
+async function requestTMDB(
+    url: string,
+    options: RequestOptions = {
+        method: "GET",
+    }
+) {
+    try {
+        const response: AxiosResponse = await axios({
+            url: `${TMDB_API_BASE_URL}${url}`,
+            method: options.method,
+            params: options.params,
+            headers: {
+                accept: "application/json",
+                Authorization: `Bearer ${
+                    process.env.TMBD_ACCES_READ_KEY || ""
+                }`,
+            },
+        })
+
+        return response.data
+    } catch (error) {
+        console.error(`Error fetching TMDB data from ${url}:`, error)
+        return null
+    }
 }
 
 export async function getTrendingMovies(timeWindow: "day" | "week" = "day") {
-    try {
-        const url = `https://api.themoviedb.org/3/trending/movie/${timeWindow}?language=en-US`
-        const response: AxiosResponse = await axios.get(url, options)
-        const data: DataTMDB = response.data
-        return data
-    } catch (error) {
-        console.error("Error fetching trending movies:", error)
-        return null
-    }
+    return requestTMDB(`/trending/movie/${timeWindow}?language=en-US`)
 }
 
 export async function getPlayingNowMovies(page: number = 1) {
-    try {
-        const url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=${page}`
-        const response: AxiosResponse = await axios.get(url, options)
-        const data: DataTMDB = response.data
-        return data
-    } catch (error) {
-        console.error("Error fetching now playing movies:", error)
-        return null
-    }
+    return requestTMDB(`/movie/now_playing?language=en-US&page=${page}`)
 }
 
 export async function getTopRatedMovies(page: number = 1) {
-    try {
-        const url = `https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=${page}`
-        const response: AxiosResponse = await axios.get(url, options)
-        const data: DataTMDB = response.data
-        return data
-    } catch (error) {
-        console.error("Error fetching top rated movies:", error)
-        return null
-    }
+    return requestTMDB(`/movie/top_rated?language=en-US&page=${page}`)
 }
 
 export async function getUpcomingMovies(page: number = 1) {
-    try {
-        const url = `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=${page}`
-
-        const response: AxiosResponse = await axios.get(url, options)
-        const data: DataTMDB = response.data
-        return data
-    } catch (error) {
-        console.error("Error fetching upcoming movies:", error)
-        return null
-    }
+    return requestTMDB(`/movie/upcoming?language=en-US&page=${page}`)
 }
 
 export async function getMoviesByKeyword(keywordId: string) {
-    try {
-        const url = `https://api.themoviedb.org/3/trending/movie/${keywordId}?language=en-US`
-        const response: AxiosResponse = await axios.get(url, options)
-        const data: DataTMDB = response.data
-        return data
-    } catch (error) {
-        console.error("Error fetching movies by keyword:", error)
-        return null
-    }
+    return requestTMDB(`/trending/movie/${keywordId}?language=en-US`)
 }
 
 export async function getMoviesByQuery(query: string) {
-    try {
-        const url = `https://api.themoviedb.org/3/search/movie?query=${query}include_adult=false&language=en-US&page=1`
-        const response: AxiosResponse = await axios.get(url, options)
-        const data: DataTMDB = response.data
-        return data
-    } catch (error) {
-        console.error("Error fetching movies by query:", error)
-        return null
-    }
+    return requestTMDB(`/search/movie`, {
+        params: { query, language: "en-US", page: 1 },
+        method: "GET",
+    })
 }
 
 export async function getMovieById(movieId: string) {
+    return requestTMDB(`/movie/${movieId}?language=en-US`)
+}
+
+export async function getMovieIds() {
     try {
-        const url = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`
-        const response: AxiosResponse = await axios.get(url, options)
-        const data: SingleDataTMDB = response.data
-        return data
+        const movies = await prisma.movie.findMany({
+            select: {
+                movie_id: true,
+            },
+        })
+
+        return { movies }
     } catch (error) {
-        console.error("Error fetching movies by id:", error)
-        return null
+        return { error }
     }
 }

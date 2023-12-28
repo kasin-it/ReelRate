@@ -60,9 +60,9 @@ export async function getMovieWithReviews(
     const movieId = movieData.id.toString()
 
     try {
-        const { success, data, error } = await getMovieReviews(movieId)
+        const { review, error } = await getMovieReviews(movieId)
 
-        if (!success) {
+        if (error) {
             console.error(
                 `Failed to retrieve reviews for movie ${movieId}: ${
                     error || "Unknown error"
@@ -71,7 +71,7 @@ export async function getMovieWithReviews(
             return undefined
         }
 
-        if (!data) {
+        if (!review) {
             return undefined
         }
 
@@ -80,7 +80,7 @@ export async function getMovieWithReviews(
             passive_reviews,
             positive_reviews,
             negative_reviews,
-        } = data
+        } = review
 
         const movieWithReviews: MovieDetails = {
             ...movieData,
@@ -107,9 +107,9 @@ export async function getMoviesListWithReviews(
 
         try {
             const keywordsData = await getMovieKeywords(movieId)
-            const { success, data, error } = await getMovieReviews(movieId)
+            const { error, review } = await getMovieReviews(movieId)
 
-            if (!success || !data) {
+            if (error || !review) {
                 console.error(
                     `Failed to retrieve reviews for movie ${movieId}: ${
                         error || "Unknown error"
@@ -123,7 +123,7 @@ export async function getMoviesListWithReviews(
                 passive_reviews,
                 positive_reviews,
                 negative_reviews,
-            } = data
+            } = review
 
             const movieWithKeywords: Movie = {
                 ...result,
