@@ -2,8 +2,8 @@
 
 import Link from "next/link"
 import { Navigation } from "@/enums/navigation"
-import { User } from "@/types"
 import { LogOut, User as UserIcon } from "lucide-react"
+import { User } from "next-auth"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {

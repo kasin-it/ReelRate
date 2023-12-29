@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getMoviesByQuery } from "@/actions/get-movies"
+import { getMoviesByQuery } from "@/actions/tmdb"
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)

@@ -1,11 +1,11 @@
 import dynamic from "next/dynamic"
-import { User } from "@/types"
-import { getServerSession } from "next-auth"
+import Link from "next/link"
+import { Navigation } from "@/enums/navigation"
+import { getServerSession, User } from "next-auth"
 
+import { buttonVariants } from "@/components/ui/button"
 import Container from "@/components/ui/container"
 import Logo from "@/components/ui/logo"
-
-import AuthenticateButtons from "./authenticate-buttons"
 
 const UserButton = dynamic(() => import("./user-button"), {
     loading: () => null,
@@ -15,17 +15,20 @@ const UserButton = dynamic(() => import("./user-button"), {
 async function Navbar() {
     const session = await getServerSession()
 
-    console.log(session)
-
     return (
         <div className="mb-10 shadow-sm">
             <Container>
                 <nav className="flex h-20 items-center justify-between py-5">
                     <Logo />
                     {session?.user ? (
-                        <UserButton user={session.user} />
+                        <UserButton user={session.user as User} />
                     ) : (
-                        <AuthenticateButtons />
+                        <Link
+                            className={buttonVariants({ variant: "default" })}
+                            href={Navigation.SignIn}
+                        >
+                            Sign In
+                        </Link>
                     )}
                 </nav>
             </Container>

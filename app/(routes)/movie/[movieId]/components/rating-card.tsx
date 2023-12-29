@@ -1,16 +1,13 @@
-import { getUser } from "@/actions/get-user"
-import { UserReview } from "@prisma/client"
+import { User, UserReview } from "@prisma/client"
 
 import { Card, CardDescription, CardTitle } from "@/components/ui/card"
 
 interface RatingCard {
     review: UserReview
+    user: User
 }
 
-async function RatingCard({ review }: RatingCard) {
-    const author = await getUser(review.user_id)
-    console.log(author)
-
+async function RatingCard({ review, user }: RatingCard) {
     return (
         <Card className="flex flex-col gap-2 p-5">
             <CardTitle>
@@ -19,10 +16,10 @@ async function RatingCard({ review }: RatingCard) {
                         <div className="flex size-16 items-center justify-center rounded-md bg-green-600 text-white">
                             <p>{review.rating}</p>
                         </div>
-                        <h1>{author?.nickname}</h1>
+                        <h1>{user?.name}</h1>
                     </div>
                     <p className="text-lg font-thin text-muted-foreground">
-                        {/* {review.createdAt.getUTCDate()} */}
+                        {review.createdAt.toDateString()}
                     </p>
                 </div>
             </CardTitle>

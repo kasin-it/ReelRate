@@ -9,12 +9,8 @@ generator client {
 }
 
 model Movie {
-  id               String       @id
-  review_average   Int          @default(0)
-  passive_reviews  Int          @default(0)
-  negative_reviews Int          @default(0)
-  positive_reviews Int          @default(0)
-  user_reviews     UserReview[]
+  id           String       @id
+  user_reviews UserReview[]
 }
 
 model User {

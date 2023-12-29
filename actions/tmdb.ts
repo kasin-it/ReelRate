@@ -1,20 +1,17 @@
 import axios, { AxiosResponse } from "axios"
 
-import { DataTMDB, SingleDataTMDB } from "@/types/tmdb"
 import prisma from "@/lib/prisma"
+
+const TMDB_API_BASE_URL = "https://api.themoviedb.org/3"
 
 interface RequestOptions {
     method: string
     params?: Record<string, string | number>
 }
 
-const TMDB_API_BASE_URL = "https://api.themoviedb.org/3"
-
 async function requestTMDB(
     url: string,
-    options: RequestOptions = {
-        method: "GET",
-    }
+    options: RequestOptions = { method: "GET" }
 ) {
     try {
         const response: AxiosResponse = await axios({
@@ -34,6 +31,11 @@ async function requestTMDB(
         console.error(`Error fetching TMDB data from ${url}:`, error)
         return null
     }
+}
+
+export async function getMovieKeywords(id: string) {
+    const res = await requestTMDB(`/movie/${id}/keywords`)
+    return res.keywords
 }
 
 export async function getTrendingMovies(timeWindow: "day" | "week" = "day") {

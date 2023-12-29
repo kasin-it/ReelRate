@@ -1,11 +1,14 @@
-import { getMovieKeywords } from "@/actions/get-keywords"
-import { getMovieReviews } from "@/actions/get-reviews"
+import { getMovieKeywords } from "@/actions/tmdb"
 import { Opinions } from "@/enums/opinions"
 import { Movie, MovieDetails } from "@/types"
+import { UserReview } from "@prisma/client"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 import { DataTMDB, SingleDataTMDB } from "@/types/tmdb"
+import prisma from "@/lib/prisma"
+
+import { Genre } from "./../types/tmdb"
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -16,10 +19,6 @@ export function getRating(reviewAverage: number, totalReviews: number) {
     let opinion = Opinions.VeryBad
 
     let reviewAverageValue = reviewAverage.toPrecision(2)
-
-    if (reviewAverage === 10) {
-        reviewAverageValue = reviewAverage.toPrecision(1)
-    }
 
     if (reviewAverage > 8) {
         opinion = Opinions.VeryGood
@@ -35,6 +34,9 @@ export function getRating(reviewAverage: number, totalReviews: number) {
         opinion = Opinions.Bad
     }
 
+    if (reviewAverage === 10) {
+        reviewAverageValue = reviewAverage.toPrecision(1)
+    }
     if (totalReviews === 0) {
         color = "bg-positive text-white"
         opinion = Opinions.NA
@@ -45,55 +47,76 @@ export function getRating(reviewAverage: number, totalReviews: number) {
 }
 
 export function getImagePath(fileName: string) {
-    const url = `https://image.tmdb.org/t/p/original${fileName}`
-    return url
+    return `https://image.tmdb.org/t/p/original${fileName}`
 }
 
 export function getMoviePath(movieId: string) {
-    const url = `/movie/${movieId}`
-    return url
+    return `/movie/${movieId}`
+}
+
+export function filterUserReviews(reviews: UserReview[], movieId: string) {
+    const filteredReviews = reviews.filter((review) => {
+        if (review.movie_id == movieId) {
+            return review
+        }
+    })
+    return filteredReviews
 }
 
 export async function getMovieWithReviews(
     movieData: SingleDataTMDB
-): Promise<MovieDetails | undefined> {
+): Promise<MovieDetails | null> {
     const movieId = movieData.id.toString()
 
     try {
-        const { review, error } = await getMovieReviews(movieId)
+        const genres = (await getMovieKeywords(movieId)) as Genre[]
+        const movie = await prisma.movie.findFirst({
+            where: {
+                id: movieId,
+            },
+            include: {
+                user_reviews: true,
+            },
+        })
 
-        if (error) {
-            console.error(
-                `Failed to retrieve reviews for movie ${movieId}: ${
-                    error || "Unknown error"
-                }`
-            )
-            return undefined
+        if (!movie) {
+            return null
         }
 
-        if (!review) {
-            return undefined
-        }
+        let reviewAverage = 0
+        let positiveReviews = 0
+        let passiveReviews = 0
+        let negativeReviews = 0
 
-        const {
-            review_average,
-            passive_reviews,
-            positive_reviews,
-            negative_reviews,
-        } = review
+        movie.user_reviews.forEach((review) => {
+            const { opinion } = getRating(review.rating, 1)
+
+            reviewAverage += review.rating
+
+            if (opinion == Opinions.Good || opinion == Opinions.VeryGood) {
+                positiveReviews += 1
+            } else if (opinion == Opinions.Mixed) {
+                passiveReviews += 1
+            } else {
+                negativeReviews += 1
+            }
+        })
+
+        reviewAverage /= movie.user_reviews.length
 
         const movieWithReviews: MovieDetails = {
             ...movieData,
-            reviewAverage: review_average,
-            positiveReviewsCount: positive_reviews,
-            passiveReviewsCount: passive_reviews,
-            negativeReviewsCount: negative_reviews,
+            genres,
+            reviewAverage: reviewAverage,
+            positiveReviewsCount: positiveReviews,
+            passiveReviewsCount: passiveReviews,
+            negativeReviewsCount: negativeReviews,
         }
 
         return movieWithReviews
     } catch (error) {
         console.error(`Error processing movie ${movieId}: ${error}`)
-        return undefined
+        return null
     }
 }
 
@@ -102,39 +125,55 @@ export async function getMoviesListWithReviews(
 ): Promise<Movie[]> {
     const movies: Movie[] = []
 
-    for (const result of moviesData.results) {
+    for (let result of moviesData.results) {
         const movieId = result.id.toString()
 
         try {
-            const keywordsData = await getMovieKeywords(movieId)
-            const { error, review } = await getMovieReviews(movieId)
+            const genres = (await getMovieKeywords(movieId)) as Genre[]
+            const movie = await prisma.movie.findFirst({
+                where: {
+                    id: movieId,
+                },
+                include: {
+                    user_reviews: true,
+                },
+            })
 
-            if (error || !review) {
-                console.error(
-                    `Failed to retrieve reviews for movies ${movieId}: ${
-                        error || "Unknown error"
-                    }`
-                )
+            if (!movie) {
                 continue
             }
 
-            const {
-                review_average,
-                passive_reviews,
-                positive_reviews,
-                negative_reviews,
-            } = review
+            let reviewAverage = 0
+            let positiveReviews = 0
+            let passiveReviews = 0
+            let negativeReviews = 0
 
-            const movieWithKeywords: Movie = {
+            movie.user_reviews.forEach((review) => {
+                const { opinion } = getRating(review.rating, 1)
+
+                reviewAverage += review.rating
+
+                if (opinion == Opinions.Good || opinion == Opinions.VeryGood) {
+                    positiveReviews += 1
+                } else if (opinion == Opinions.Mixed) {
+                    passiveReviews += 1
+                } else {
+                    negativeReviews += 1
+                }
+            })
+
+            reviewAverage /= movie.user_reviews.length
+
+            const movieWithReviews = {
                 ...result,
-                keywords: keywordsData?.keywords,
-                reviewAverage: review_average,
-                positiveReviewsCount: positive_reviews,
-                passiveReviewsCount: passive_reviews,
-                negativeReviewsCount: negative_reviews,
+                genres,
+                reviewAverage: reviewAverage,
+                positiveReviewsCount: positiveReviews,
+                passiveReviewsCount: passiveReviews,
+                negativeReviewsCount: negativeReviews,
             }
 
-            movies.push(movieWithKeywords)
+            movies.push(movieWithReviews)
         } catch (error) {
             console.error(`Error processing movie ${movieId}: ${error}`)
         }

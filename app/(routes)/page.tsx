@@ -4,7 +4,7 @@ import {
     getTopRatedMovies,
     getTrendingMovies,
     getUpcomingMovies,
-} from "@/actions/get-movies"
+} from "@/actions/tmdb"
 
 import { getMoviesListWithReviews } from "@/lib/utils"
 import Container from "@/components/ui/container"
