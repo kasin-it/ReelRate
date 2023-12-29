@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic"
 import { getUserMovieReview } from "@/actions/get-rewiew"
+import { User } from "@/types"
 import { getSession } from "@auth0/nextjs-auth0"
 
 import RatingCard from "./rating-card"
@@ -25,14 +26,14 @@ async function MyScore({ movieId }: MyScoreProps) {
         session?.user?.sid
     )
 
-    if (!review) {
+    if (error || !review) {
         return <ScoreMovieInput authorized={true} />
     }
 
     return (
         <>
             <h1 className="text-2xl">My Score</h1>
-            <RatingCard review={review} author={session.user.nickname} />
+            <RatingCard review={review} />
         </>
     )
 }

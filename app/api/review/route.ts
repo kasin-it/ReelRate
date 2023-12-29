@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { getUserMovieReview } from "@/actions/get-rewiew"
 import { getUser } from "@/actions/get-user"
 import { postReview } from "@/actions/post-review"
+import { User } from "@/types"
 import { getSession } from "@auth0/nextjs-auth0"
 import { z } from "zod"
 
@@ -34,7 +35,7 @@ export async function GET(req: Request) {
     }
 
     try {
-        const user = await getUser(session.user.sid)
+        const user = await getUser(session.user as User)
 
         if (!user) {
             return new NextResponse("Internal error", { status: 500 })
@@ -75,7 +76,7 @@ export async function POST(req: Request) {
     await validateRatingData(data, ratingSchema)
 
     try {
-        await getUser(session.user.sid)
+        await getUser(session.user as User)
     } catch (error) {
         console.error("Internal error: ", error)
         return new NextResponse("Internal error", { status: 500 })

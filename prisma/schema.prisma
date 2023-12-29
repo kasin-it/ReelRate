@@ -20,6 +20,8 @@ model Movie {
 model User {
   user_id      String       @id
   createdAt    DateTime     @default(now())
+  nickname     String       @default("")
+  img          String       @default("")
   user_reviews UserReview[]
 }
 

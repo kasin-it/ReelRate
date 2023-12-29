@@ -1,7 +1,7 @@
 import { Keyword, Result, SingleDataTMDB } from "@/types/tmdb"
 
 export interface User {
-    user_id?: string
+    sid: string
     nickname: string
     name: string
     picture?: string
