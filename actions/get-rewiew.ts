@@ -1,17 +1,17 @@
 import prisma from "@/lib/prisma"
 
-export async function getMovieInfo(movie_id: string) {
+export async function getMovieInfo(id: string) {
     try {
         let movie = await prisma.movie.findFirst({
             where: {
-                movie_id,
+                id,
             },
         })
 
         if (!movie) {
             movie = await prisma.movie.create({
                 data: {
-                    movie_id,
+                    id,
                 },
             })
 

@@ -1,10 +1,10 @@
 import { Keyword, Result, SingleDataTMDB } from "@/types/tmdb"
 
 export interface User {
-    sid: string
-    nickname: string
+    id: string
     name: string
-    picture?: string
+    email: string
+    image: string
 }
 
 export interface Movie extends Result {

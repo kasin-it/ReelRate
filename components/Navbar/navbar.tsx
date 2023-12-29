@@ -1,31 +1,32 @@
 import dynamic from "next/dynamic"
-import { checkUser } from "@/actions/check-user"
 import { User } from "@/types"
-import { getSession } from "@auth0/nextjs-auth0"
+import { getServerSession } from "next-auth"
 
 import Container from "@/components/ui/container"
 import Logo from "@/components/ui/logo"
 
-const UserSection = dynamic(() => import("@/components/Navbar/user-section"), {
+import AuthenticateButtons from "./authenticate-buttons"
+
+const UserButton = dynamic(() => import("./user-button"), {
     loading: () => null,
     ssr: false,
 })
 
 async function Navbar() {
-    const session = await getSession()
+    const session = await getServerSession()
 
-    let user = null
-
-    if (session?.user) {
-        user = await checkUser(session.user as User)
-    }
+    console.log(session)
 
     return (
         <div className="mb-10 shadow-sm">
             <Container>
                 <nav className="flex h-20 items-center justify-between py-5">
                     <Logo />
-                    <UserSection user={user} />
+                    {session?.user ? (
+                        <UserButton user={session.user} />
+                    ) : (
+                        <AuthenticateButtons />
+                    )}
                 </nav>
             </Container>
         </div>

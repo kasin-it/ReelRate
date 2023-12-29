@@ -28,8 +28,8 @@ export async function generateStaticParams(): Promise<any[]> {
         const { movies, error } = await getMovieIds()
 
         return (
-            movies?.map(({ movie_id }: { movie_id: string }) => ({
-                movieId: movie_id,
+            movies?.map(({ id }: { id: string }) => ({
+                movieId: id,
             })) || []
         )
     } catch (error) {

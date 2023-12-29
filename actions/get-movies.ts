@@ -71,7 +71,7 @@ export async function getMovieIds() {
     try {
         const movies = await prisma.movie.findMany({
             select: {
-                movie_id: true,
+                id: true,
             },
         })
 

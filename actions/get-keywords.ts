@@ -33,6 +33,6 @@ async function requestTMDB(
     }
 }
 
-export async function getMovieKeywords(movie_id: string) {
-    return requestTMDB(`/movie/${movie_id}/keywords`)
+export async function getMovieKeywords(id: string) {
+    return requestTMDB(`/movie/${id}/keywords`)
 }

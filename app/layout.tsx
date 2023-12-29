@@ -3,8 +3,7 @@ import { Akshar } from "next/font/google"
 
 import "./globals.css"
 
-import { UserProvider } from "@auth0/nextjs-auth0/client"
-import { QueryClient, QueryClientProvider } from "react-query"
+import { NextAuthProvider } from "@/providers/next-auth-provider"
 
 import { Toaster } from "@/components/ui/toaster"
 import Footer from "@/components/Footer/footer"
@@ -28,8 +27,8 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en">
-            <UserProvider>
+        <NextAuthProvider>
+            <html lang="en">
                 <body className={font.className}>
                     <Navbar />
                     {children}
@@ -37,7 +36,7 @@ export default function RootLayout({
                     <TailwindIndicator />
                     <Toaster />
                 </body>
-            </UserProvider>
-        </html>
+            </html>
+        </NextAuthProvider>
     )
 }

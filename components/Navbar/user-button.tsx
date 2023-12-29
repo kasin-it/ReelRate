@@ -19,13 +19,13 @@ interface UserButtonProps {
     user: User
 }
 
-function UserButton({ user: { picture, nickname, name } }: UserButtonProps) {
+function UserButton({ user: { image, name } }: UserButtonProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Avatar>
-                    <AvatarImage src={picture} />
-                    <AvatarFallback>{nickname[0]}</AvatarFallback>
+                    <AvatarImage src={image || ""} />
+                    <AvatarFallback>{name![0] || ""}</AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">

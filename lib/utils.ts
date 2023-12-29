@@ -111,7 +111,7 @@ export async function getMoviesListWithReviews(
 
             if (error || !review) {
                 console.error(
-                    `Failed to retrieve reviews for movie ${movieId}: ${
+                    `Failed to retrieve reviews for movies ${movieId}: ${
                         error || "Unknown error"
                     }`
                 )

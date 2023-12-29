@@ -4,7 +4,7 @@ export async function getMovieReviews(movieId: string) {
     try {
         const review = await prisma.movie.findFirst({
             where: {
-                movie_id: movieId,
+                id: movieId,
             },
         })
 

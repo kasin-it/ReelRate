@@ -9,7 +9,7 @@ generator client {
 }
 
 model Movie {
-  movie_id         String       @id
+  id               String       @id
   review_average   Int          @default(0)
   passive_reviews  Int          @default(0)
   negative_reviews Int          @default(0)
@@ -18,10 +18,11 @@ model Movie {
 }
 
 model User {
-  user_id      String       @id
+  id           String       @id
+  email        String       @unique
   createdAt    DateTime     @default(now())
-  nickname     String       @default("")
-  img          String       @default("")
+  name         String       @default("")
+  image        String       @default("")
   user_reviews UserReview[]
 }
 
@@ -32,8 +33,8 @@ model UserReview {
   content   String
   rating    Int
   createdAt DateTime @default(now())
-  movie     Movie    @relation(fields: [movie_id], references: [movie_id])
-  user      User     @relation(fields: [user_id], references: [user_id])
+  movie     Movie    @relation(fields: [movie_id], references: [id])
+  user      User     @relation(fields: [user_id], references: [id])
 
   @@index([user_id])
   @@index([movie_id])

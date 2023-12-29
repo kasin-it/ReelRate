@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation"
 import { Navigation } from "@/enums/navigation"
-import { useUser } from "@auth0/nextjs-auth0/client"
 
 import { cn, getRating } from "@/lib/utils"
 import useRating from "@/hooks/use-rating"
