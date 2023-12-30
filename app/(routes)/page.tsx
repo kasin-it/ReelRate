@@ -1,4 +1,4 @@
-import dynamic from "next/dynamic"
+import dynamicImport from "next/dynamic"
 import {
     getPlayingNowMovies,
     getTopRatedMovies,
@@ -9,11 +9,15 @@ import {
 import { getMoviesListWithReviews } from "@/lib/utils"
 import Container from "@/components/ui/container"
 
-const ScrollMovies = dynamic(() => import("@/components/ui/scroll-movies"), {
-    ssr: true,
-})
+const ScrollMovies = dynamicImport(
+    () => import("@/components/ui/scroll-movies"),
+    {
+        ssr: true,
+    }
+)
 
 export const revalidate = 86400
+export const dynamic = "force-static"
 
 export default async function Home() {
     const playingNowMoviesData = await getPlayingNowMovies()

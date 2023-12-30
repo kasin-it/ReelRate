@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { revalidatePath } from "next/cache"
 import { useParams } from "next/navigation"
 import axios from "axios"
 import { useForm } from "react-hook-form"
@@ -40,9 +39,7 @@ function RateForm({ color, index }: RateForm) {
 
         try {
             await axios.post("/api/review", data)
-            toast({
-                title: "Your review has been successfully posted!",
-            })
+            window.location.reload()
         } catch (error) {
             toast({
                 variant: "destructive",

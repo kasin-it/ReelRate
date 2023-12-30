@@ -22,14 +22,15 @@ async function MyScore({ movieId }: MyScoreProps) {
     }
 
     const review = filterUserReviews(user.user_reviews, movieId)
-    if (!review) {
+
+    if (review.length == 0) {
         return <ScoreMovieInput authorized={true} />
     }
 
     return (
         <>
             <h1 className="text-2xl">My Score</h1>
-            <RatingCard review={review[0]} user={user} />
+            <RatingCard review={review[0]} user={user} canDelete={true} />
         </>
     )
 }

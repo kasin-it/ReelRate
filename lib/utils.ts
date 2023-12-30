@@ -34,9 +34,6 @@ export function getRating(reviewAverage: number, totalReviews: number) {
         opinion = Opinions.Bad
     }
 
-    if (reviewAverage === 10) {
-        reviewAverageValue = reviewAverage.toPrecision(1)
-    }
     if (totalReviews === 0) {
         color = "bg-positive text-white"
         opinion = Opinions.NA
@@ -102,7 +99,9 @@ export async function getMovieWithReviews(
             }
         })
 
-        reviewAverage /= movie.user_reviews.length
+        if (movie.user_reviews.length > 0) {
+            reviewAverage /= movie.user_reviews.length
+        }
 
         const movieWithReviews: MovieDetails = {
             ...movieData,
@@ -162,7 +161,9 @@ export async function getMoviesListWithReviews(
                 }
             })
 
-            reviewAverage /= movie.user_reviews.length
+            if (movie.user_reviews.length > 0) {
+                reviewAverage /= movie.user_reviews.length
+            }
 
             const movieWithReviews = {
                 ...result,

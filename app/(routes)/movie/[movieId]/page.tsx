@@ -1,4 +1,4 @@
-import dynamic from "next/dynamic"
+import dynamicImport from "next/dynamic"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { getMovieById } from "@/actions/tmdb"
@@ -17,7 +17,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-const MyScore = dynamic(() => import("./components/my-score"), {
+const MyScore = dynamicImport(() => import("./components/my-score"), {
     loading: () => <p>Loading...</p>,
     ssr: true,
 })

@@ -95,7 +95,7 @@ function ScoreMovieInput({ authorized }: ScoreMovieInputProps) {
                         <p>{currentIndex === null ? "" : currentIndex}</p>
                     </div>
                 </div>
-                <div className="grid grid-cols-11 [&>*:first-child]:rounded-s-full [&>*:last-child]:rounded-e-full">
+                <div className="grid grid-cols-11 px-0 [&>*:first-child]:rounded-s-full [&>*:last-child]:rounded-e-full">
                     {Array.from({ length: SCORE_LENGTH }).map((_, index) => (
                         <RatingButton
                             key={index}

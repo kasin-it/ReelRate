@@ -9,7 +9,7 @@ import Logo from "@/components/ui/logo"
 
 const UserButton = dynamic(() => import("./user-button"), {
     loading: () => null,
-    ssr: false,
+    ssr: true,
 })
 
 async function Navbar() {
@@ -20,7 +20,7 @@ async function Navbar() {
             <Container>
                 <nav className="flex h-20 items-center justify-between py-5">
                     <Logo />
-                    {session?.user ? (
+                    {session ? (
                         <UserButton user={session.user as User} />
                     ) : (
                         <Link
