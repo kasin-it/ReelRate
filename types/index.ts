@@ -1,3 +1,5 @@
+import { UserReview } from "@prisma/client"
+
 import { Keyword, Result, SingleDataTMDB } from "@/types/tmdb"
 
 export interface Movie extends Result {
@@ -12,4 +14,10 @@ export interface MovieDetails extends SingleDataTMDB {
     positiveReviewsCount: number
     passiveReviewsCount: number
     negativeReviewsCount: number
+}
+
+export interface UserReviewWithName extends UserReview {
+    user: {
+        name: string
+    }
 }

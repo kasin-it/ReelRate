@@ -1,7 +1,8 @@
-import dynamicImport from "next/dynamic"
 import Image from "next/image"
 import { notFound } from "next/navigation"
+import { getMovieReviewsbyId } from "@/actions"
 import { getMovieById } from "@/actions/tmdb"
+import { UserReviewWithName } from "@/types"
 import { Bookmark, Heart, List } from "lucide-react"
 
 import prisma from "@/lib/prisma"
@@ -17,10 +18,8 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-const MyScore = dynamicImport(() => import("./components/my-score"), {
-    loading: () => <p>Loading...</p>,
-    ssr: true,
-})
+import MoreReviews from "./components/more-reviews"
+import MyScore from "./components/my-score"
 
 export const revalidate = 84400
 
@@ -49,6 +48,7 @@ interface MoviePageProps {
 
 async function MoviePage({ params: { movieId } }: MoviePageProps) {
     const movieData = await getMovieById(movieId)
+    const reviews = (await getMovieReviewsbyId(movieId)) as UserReviewWithName[]
 
     if (!movieData) {
         return notFound()
@@ -179,6 +179,7 @@ async function MoviePage({ params: { movieId } }: MoviePageProps) {
             <Separator />
             <MyScore movieId={movieId} />
             <Separator />
+            <MoreReviews reviews={reviews} />
         </Container>
     )
 }

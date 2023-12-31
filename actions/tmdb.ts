@@ -68,17 +68,3 @@ export async function getMoviesByQuery(query: string) {
 export async function getMovieById(movieId: string) {
     return requestTMDB(`/movie/${movieId}?language=en-US`)
 }
-
-export async function getMovieIds() {
-    try {
-        const movies = await prisma.movie.findMany({
-            select: {
-                id: true,
-            },
-        })
-
-        return { movies }
-    } catch (error) {
-        return { error }
-    }
-}
