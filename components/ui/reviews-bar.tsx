@@ -26,7 +26,7 @@ function ReviewsBar({
     return (
         <div
             className={cn(
-                "flex h-[8px] w-full gap-1 overflow-hidden rounded-full bg-gray-300"
+                "flex h-[8px] w-full overflow-hidden rounded-full bg-gray-300"
             )}
         >
             {totalReviews === 0 ? null : (

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Navigation } from "@/enums/navigation"
 import { LogOut, User as UserIcon } from "lucide-react"
 import { User } from "next-auth"
+import { signOut } from "next-auth/react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -44,14 +45,14 @@ function UserButton({ user: { image, name } }: UserButtonProps) {
 
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                    <Link
-                        href={Navigation.Logout}
+                    <button
                         aria-label="logout"
                         className="flex w-full items-center"
+                        onClick={() => signOut()}
                     >
                         <LogOut className="mr-2 h-4 w-4" />
-                        <span>Log out</span>
-                    </Link>
+                        Sign Out
+                    </button>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
