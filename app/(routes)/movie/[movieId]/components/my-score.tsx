@@ -22,7 +22,7 @@ async function MyScore({ movieId }: MyScoreProps) {
         return <ScoreMovieInput authorized={false} />
     }
 
-    const review = filterUserReviews(user.user_reviews, movieId)
+    const review = filterUserReviews(user.userReviews, movieId)
 
     if (review.length == 0) {
         return <ScoreMovieInput authorized={true} />

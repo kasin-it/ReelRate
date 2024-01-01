@@ -9,21 +9,23 @@ generator client {
 }
 
 model Movie {
-  id           String       @id
-  user_reviews UserReview[]
+  id            String          @id
+  userReviews   UserReview[]
+  UserFavourite UserFavourite[]
 }
 
 model User {
-  id           String       @id
-  email        String       @unique
-  createdAt    DateTime     @default(now())
-  name         String       @default("")
-  image        String       @default("")
-  user_reviews UserReview[]
+  id             String          @id
+  email          String          @unique
+  createdAt      DateTime        @default(now())
+  name           String          @default("")
+  image          String          @default("")
+  userReviews    UserReview[]
+  userFavourites UserFavourite[]
 }
 
 model UserReview {
-  review_id Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   movie_id  String
   user_id   String
   content   String
@@ -31,6 +33,17 @@ model UserReview {
   createdAt DateTime @default(now())
   movie     Movie    @relation(fields: [movie_id], references: [id])
   user      User     @relation(fields: [user_id], references: [id])
+
+  @@index([user_id])
+  @@index([movie_id])
+}
+
+model UserFavourite {
+  id       Int    @id @default(autoincrement())
+  user_id  String
+  movie_id String
+  movie    Movie  @relation(fields: [movie_id], references: [id])
+  User     User   @relation(fields: [user_id], references: [id])
 
   @@index([user_id])
   @@index([movie_id])

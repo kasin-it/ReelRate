@@ -1,4 +1,5 @@
 import dynamicImport from "next/dynamic"
+import { getMoviesListWithReviews } from "@/actions"
 import {
     getPlayingNowMovies,
     getTopRatedMovies,
@@ -6,7 +7,6 @@ import {
     getUpcomingMovies,
 } from "@/actions/tmdb"
 
-import { getMoviesListWithReviews } from "@/lib/utils"
 import Container from "@/components/ui/container"
 
 const ScrollMovies = dynamicImport(

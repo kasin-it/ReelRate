@@ -29,9 +29,7 @@ async function RatingCard({
                         <p className="text-lg font-thin text-muted-foreground">
                             {review.createdAt.toDateString()}
                         </p>
-                        {canDelete && (
-                            <DeleteButton reviewId={review.review_id} />
-                        )}
+                        {canDelete && <DeleteButton reviewId={review.id} />}
                     </div>
                 </div>
             </CardTitle>

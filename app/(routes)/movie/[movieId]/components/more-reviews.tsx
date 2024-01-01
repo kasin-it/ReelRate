@@ -12,7 +12,7 @@ function MoreReviews({ reviews }: MoreReviewsProps) {
             <h1 className="text-2xl">Reviews</h1>
             {reviews.map((review) => (
                 <RatingCard
-                    key={review.review_id}
+                    key={review.id}
                     review={review}
                     userName={review.user.name}
                 />

@@ -73,7 +73,7 @@ async function handleDeleteRequest(req: Request) {
 
     const review = await prisma.userReview.delete({
         where: {
-            review_id: data.reviewId,
+            id: data.reviewId,
             user_id: user.id,
         },
     })
