@@ -1,4 +1,3 @@
-import { revalidatePath } from "next/cache"
 import { NextResponse } from "next/server"
 import { getSelf } from "@/actions"
 import { z } from "zod"

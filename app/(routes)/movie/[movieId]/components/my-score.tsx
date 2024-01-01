@@ -3,7 +3,7 @@ import { getSelf } from "@/actions"
 
 import { filterUserReviews } from "@/lib/utils"
 
-import RatingCard from "./rating-card"
+import RatingCard from "@/components/ui/rating-card"
 import ScoreMovieInput from "./score-movie-input"
 
 // const ScoreMovieInput = dynamic(() => import("./score-movie-input"), {

@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -17,9 +18,12 @@ function ProfileNavigation() {
     return (
         <div className="flex gap-3 text-black">
             {ROUTES.map((route, idx) => (
-                <>
+                <React.Fragment key={idx}>
                     {idx !== 0 && (
-                        <Separator orientation="vertical" key={idx} />
+                        <Separator
+                            orientation="vertical"
+                            key={`separator-${idx}`}
+                        />
                     )}
                     <Link
                         key={route.href}
@@ -32,9 +36,10 @@ function ProfileNavigation() {
                     >
                         {route.label}
                     </Link>
-                </>
+                </React.Fragment>
             ))}
         </div>
     )
 }
+
 export default ProfileNavigation

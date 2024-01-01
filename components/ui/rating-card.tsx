@@ -1,8 +1,7 @@
 import { UserReview } from "@prisma/client"
 
 import { Card, CardDescription, CardTitle } from "@/components/ui/card"
-
-import DeleteButton from "./delete-button"
+import DeleteButton from "@/components/ui/delete-button"
 
 interface RatingCardProps {
     review: UserReview

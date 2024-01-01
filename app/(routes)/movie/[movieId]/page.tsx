@@ -3,7 +3,6 @@ import { notFound } from "next/navigation"
 import { getMovieReviewsbyId, getMovieWithReviews } from "@/actions"
 import { getMovieById } from "@/actions/tmdb"
 import { UserReviewWithName } from "@/types"
-import { Bookmark, Heart, List } from "lucide-react"
 
 import prisma from "@/lib/prisma"
 import { cn, getImagePath, getRating } from "@/lib/utils"
@@ -11,13 +10,8 @@ import { Badge } from "@/components/ui/badge"
 import Container from "@/components/ui/container"
 import ReviewsBar from "@/components/ui/reviews-bar"
 import { Separator } from "@/components/ui/separator"
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip"
 
+import AddToFavouritesButton from "./components/add-to-favourites-button"
 import MoreReviews from "./components/more-reviews"
 import MyScore from "./components/my-score"
 
@@ -137,42 +131,7 @@ async function MoviePage({ params: { movieId } }: MoviePageProps) {
                         </span>
                     </p>
                     <div className="flex w-full gap-3">
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger>
-                                    <div className="rounded-full border p-5 shadow-lg">
-                                        <List />
-                                    </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Add to library</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger>
-                                    <div className="rounded-full border p-5 shadow-lg">
-                                        <Heart />
-                                    </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Add to library</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger>
-                                    <div className="rounded-full border p-5 shadow-lg">
-                                        <Bookmark />
-                                    </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Add to library</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
+                        <AddToFavouritesButton movieId={movieId} />
                     </div>
                 </div>
             </div>

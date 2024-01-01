@@ -1,6 +1,6 @@
-import { getMovieKeywords } from "@/actions/tmdb"
+import { getMovieById, getMovieKeywords } from "@/actions/tmdb"
 import { Opinions } from "@/enums/opinions"
-import { Movie, MovieDetails } from "@/types"
+import { Movie, MovieDetails, UserFavouriteWithMovie, UserReviewWithMovie } from "@/types"
 import { getServerSession } from "next-auth"
 
 import { DataTMDB, Genre, SingleDataTMDB } from "@/types/tmdb"
@@ -28,6 +28,86 @@ export async function getSelf(includeReviews: boolean = false) {
     } catch (error) {
         console.error("Error fetching or creating user:", error)
     }
+}
+
+export async function getUserReviews() {
+    const user = await getSelf()
+
+    if (!user) {
+        throw new Error("UNAUTHORIZED")
+    }
+
+    const movies: UserReviewWithMovie[] = []
+
+    try {
+        const reviews = await prisma.userReview.findMany({
+            where: {
+                user_id: user.id,
+            },
+            include: {
+                movie: true,
+            },
+        })
+
+        if (!reviews) {
+            return movies
+        }
+
+        for (let movieReview of reviews) {
+            const movieId = movieReview.movie_id
+            try {
+                const movie = await getMovieById(movieId)
+
+                movies.push({ ...movieReview, ...movie })
+            } catch (error) {
+                console.error("Error fetching user favourite movie id: ", movieId)
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching user reviews:", error)
+    }
+
+    return movies
+}
+
+export async function getUserFavourites(): Promise<UserFavouriteWithMovie[]> {
+    const user = await getSelf()
+
+    if (!user) {
+        throw new Error("UNAUTHORIZED")
+    }
+
+    const movies: UserFavouriteWithMovie[] = []
+
+    try {
+        const favourites = await prisma.userFavourite.findMany({
+            where: {
+                user_id: user.id,
+            },
+            include: {
+                movie: true,
+            },
+        })
+
+        if (!favourites) {
+            return movies
+        }
+
+        for (let favouriteMovie of favourites) {
+            const movieId = favouriteMovie.movie_id
+            try {
+                const movie = await getMovieById(movieId)
+
+                movies.push({ ...favouriteMovie, ...movie })
+            } catch (error) {
+                console.error("Error fetching id: ", movieId)
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching user favourites:", error)
+    }
+
+    return movies
 }
 
 export async function getMovieReviewsbyId(movieId: string) {

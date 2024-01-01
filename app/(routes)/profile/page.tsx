@@ -1,25 +1,16 @@
-import { redirect } from "next/navigation"
-import { getSelf } from "@/actions"
-import { Navigation } from "@/enums/navigation"
+import { getUserReviews } from "@/actions"
 
-import prisma from "@/lib/prisma"
+import RatingCard from "@/components/ui/rating-card"
 
 async function MyReviews() {
-    const user = await getSelf()
+    const reviews = await getUserReviews()
 
-    if (!user) {
-        redirect(Navigation.SignIn)
-    }
-
-    // const my_reviews = await prisma.userReview.findMany({
-    //     where: {
-    //         user_id: user.id,
-    //     },
-    //     include: {
-    //         movie,
-    //     },
-    // })
-
-    return <section></section>
+    return (
+        <section>
+            {reviews.map((review) => (
+                <p key={review.id}>{review.rating}</p>
+            ))}
+        </section>
+    )
 }
 export default MyReviews

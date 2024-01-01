@@ -1,3 +1,4 @@
+import React from "react"
 import { getSelf } from "@/actions"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -6,7 +7,7 @@ import { Separator } from "@/components/ui/separator"
 
 import ProfileNavigation from "./profile-navigation"
 
-async function ProfilePage() {
+async function ProfilePage({ children }: { children: React.ReactNode }) {
     const user = await getSelf()
 
     return (
@@ -21,6 +22,7 @@ async function ProfilePage() {
             <Separator />
             <ProfileNavigation />
             <Separator />
+            {children}
         </Container>
     )
 }

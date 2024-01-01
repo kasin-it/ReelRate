@@ -1,6 +1,6 @@
 import { UserReviewWithName } from "@/types"
 
-import RatingCard from "./rating-card"
+import RatingCard from "@/components/ui/rating-card"
 
 interface MoreReviewsProps {
     reviews: UserReviewWithName[]
