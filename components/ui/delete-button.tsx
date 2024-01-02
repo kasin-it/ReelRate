@@ -9,9 +9,10 @@ import { useToast } from "@/components/ui/use-toast"
 
 interface DeleteButtonProps {
     reviewId: number
+    className?: string
 }
 
-function DeleteButton({ reviewId }: DeleteButtonProps) {
+function DeleteButton({ reviewId, className }: DeleteButtonProps) {
     const { toast } = useToast()
     const [isLoading, setIsLoading] = useState(false)
 
@@ -22,6 +23,8 @@ function DeleteButton({ reviewId }: DeleteButtonProps) {
             },
         }
 
+        setIsLoading(true)
+
         try {
             await axios.delete("/api/review", config)
             window.location.reload()
@@ -31,6 +34,8 @@ function DeleteButton({ reviewId }: DeleteButtonProps) {
                 title: "An unexpected error occurred. Please try again later.",
             })
             console.error(error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -39,6 +44,7 @@ function DeleteButton({ reviewId }: DeleteButtonProps) {
             variant={"destructive"}
             onClick={handleDeleteClick}
             disabled={isLoading}
+            className={className}
         >
             {isLoading ? <Loader className="animate-spin" /> : <Trash />}
         </Button>

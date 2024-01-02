@@ -1,6 +1,11 @@
 import { getMovieById, getMovieKeywords } from "@/actions/tmdb"
 import { Opinions } from "@/enums/opinions"
-import { Movie, MovieDetails, UserFavouriteWithMovie, UserReviewWithMovie } from "@/types"
+import {
+    Movie,
+    MovieDetails,
+    UserFavouriteWithMovie,
+    UserReviewWithMovie,
+} from "@/types"
 import { getServerSession } from "next-auth"
 
 import { DataTMDB, Genre, SingleDataTMDB } from "@/types/tmdb"
@@ -58,9 +63,12 @@ export async function getUserReviews() {
             try {
                 const movie = await getMovieById(movieId)
 
-                movies.push({ ...movieReview, ...movie })
+                movies.push({ ...movie, ...movieReview })
             } catch (error) {
-                console.error("Error fetching user favourite movie id: ", movieId)
+                console.error(
+                    "Error fetching user favourite movie id: ",
+                    movieId
+                )
             }
         }
     } catch (error) {
@@ -98,7 +106,7 @@ export async function getUserFavourites(): Promise<UserFavouriteWithMovie[]> {
             try {
                 const movie = await getMovieById(movieId)
 
-                movies.push({ ...favouriteMovie, ...movie })
+                movies.push({ ...movie, ...favouriteMovie })
             } catch (error) {
                 console.error("Error fetching id: ", movieId)
             }

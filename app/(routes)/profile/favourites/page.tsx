@@ -2,6 +2,8 @@ import { redirect } from "next/navigation"
 import { getUserFavourites } from "@/actions"
 import { Navigation } from "@/enums/navigation"
 
+import FavouriteCard from "./favourite-card"
+
 async function page() {
     const favourites = await getUserFavourites()
 
@@ -9,8 +11,8 @@ async function page() {
 
     return (
         <section>
-            {favourites.map((favourite, index) => (
-                <p key={favourite.id}>{favourite.title}</p>
+            {favourites.map((favourite) => (
+                <FavouriteCard favourite={favourite} key={favourite.id} />
             ))}
         </section>
     )

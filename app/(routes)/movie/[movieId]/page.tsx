@@ -6,12 +6,12 @@ import { UserReviewWithName } from "@/types"
 
 import prisma from "@/lib/prisma"
 import { cn, getImagePath, getRating } from "@/lib/utils"
+import AddToFavouritesButton from "@/components/ui/add-to-favourites-button"
 import { Badge } from "@/components/ui/badge"
 import Container from "@/components/ui/container"
 import ReviewsBar from "@/components/ui/reviews-bar"
 import { Separator } from "@/components/ui/separator"
 
-import AddToFavouritesButton from "./components/add-to-favourites-button"
 import MoreReviews from "./components/more-reviews"
 import MyScore from "./components/my-score"
 

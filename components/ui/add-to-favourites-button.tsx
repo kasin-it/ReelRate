@@ -15,10 +15,14 @@ import { useToast } from "@/components/ui/use-toast"
 
 interface AddToFavouritesButtonProps {
     movieId: string
+    isLiked?: boolean
 }
 
-function AddToFavouritesButton({ movieId }: AddToFavouritesButtonProps) {
-    const [isFavourite, setIsFavourite] = useState(false)
+function AddToFavouritesButton({
+    movieId,
+    isLiked = false,
+}: AddToFavouritesButtonProps) {
+    const [isFavourite, setIsFavourite] = useState(isLiked)
     const [isLoading, setIsLoading] = useState(false)
     const { toast } = useToast()
 
@@ -55,7 +59,7 @@ function AddToFavouritesButton({ movieId }: AddToFavouritesButtonProps) {
                         disabled={isLoading}
                         onClick={handleClick}
                         className={cn(
-                            "rounded-full border p-5 shadow-lg",
+                            "rounded-full border bg-white p-5 shadow-lg",
                             isFavourite ? "bg-red-500 text-white" : null
                         )}
                     >
