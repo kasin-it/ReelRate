@@ -8,7 +8,7 @@ async function MyReviews() {
     const reviews = await getUserReviews()
 
     return (
-        <section className="flex flex-col items-center gap-10">
+        <section className="flex w-full flex-col flex-wrap items-center gap-10 sm:items-start">
             {reviews.map((review) => (
                 <MyReviewCard review={review} key={review.id} />
             ))}

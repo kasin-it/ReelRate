@@ -13,7 +13,10 @@ function MyReviewCard({ review }: MyReviewCardProps) {
     const { color, opinion } = getRating(review.rating, 1)
 
     return (
-        <Card className="relative flex max-w-2xl gap-5 p-4" key={review.id}>
+        <Card
+            className="relative flex max-w-2xl flex-col items-center gap-5 p-4 sm:flex-row sm:items-start"
+            key={review.id}
+        >
             <Image
                 src={getImagePath(review.poster_path)}
                 width={200}

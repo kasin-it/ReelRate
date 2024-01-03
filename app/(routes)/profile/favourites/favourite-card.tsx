@@ -10,7 +10,7 @@ interface FavouriteCardProps {
 
 function FavouriteCard({ favourite }: FavouriteCardProps) {
     return (
-        <div className="relative max-w-xs">
+        <div className="relative flex max-w-xs flex-col gap-5">
             <Image
                 src={getImagePath(favourite.poster_path)}
                 alt={favourite.title}
@@ -18,7 +18,7 @@ function FavouriteCard({ favourite }: FavouriteCardProps) {
                 height={0}
                 style={{ height: "auto" }}
             />
-            <h1>{favourite.title}</h1>
+            <h1 className="text-3xl font-bold">{favourite.title}</h1>
             <div className={"absolute -right-5 -top-5 z-50"}>
                 <AddToFavouritesButton
                     refresh={true}

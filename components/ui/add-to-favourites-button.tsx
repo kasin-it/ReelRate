@@ -1,8 +1,11 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { Navigation } from "@/enums/navigation"
 import axios from "axios"
 import { Heart } from "lucide-react"
+import { getSession, useSession } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
 import {
@@ -27,8 +30,16 @@ function AddToFavouritesButton({
     const [isFavourite, setIsFavourite] = useState(isLiked)
     const [isLoading, setIsLoading] = useState(false)
     const { toast } = useToast()
+    const session = useSession()
+    const router = useRouter()
 
     const handleClick = async () => {
+        console.log(session)
+        if (!session.data) {
+            router.push(Navigation.SignIn)
+            return
+        }
+
         setIsFavourite((prev) => !prev)
         setIsLoading(true)
 
