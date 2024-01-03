@@ -1,6 +1,10 @@
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { getMovieReviewsbyId, getMovieWithReviews } from "@/actions"
+import {
+    getMovieReviewsbyId,
+    getMovieWithReviews,
+    getuserFavouriteMovieById,
+} from "@/actions"
 import { getMovieById } from "@/actions/tmdb"
 import { UserReviewWithName } from "@/types"
 
@@ -43,6 +47,7 @@ interface MoviePageProps {
 async function MoviePage({ params: { movieId } }: MoviePageProps) {
     const movieData = await getMovieById(movieId)
     const reviews = (await getMovieReviewsbyId(movieId)) as UserReviewWithName[]
+    const isFavourite = await getuserFavouriteMovieById(movieId)
 
     if (!movieData) {
         return notFound()
@@ -131,7 +136,10 @@ async function MoviePage({ params: { movieId } }: MoviePageProps) {
                         </span>
                     </p>
                     <div className="flex w-full gap-3">
-                        <AddToFavouritesButton movieId={movieId} />
+                        <AddToFavouritesButton
+                            movieId={movieId}
+                            isLiked={isFavourite}
+                        />
                     </div>
                 </div>
             </div>

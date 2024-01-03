@@ -21,6 +21,7 @@ function FavouriteCard({ favourite }: FavouriteCardProps) {
             <h1>{favourite.title}</h1>
             <div className={"absolute -right-5 -top-5 z-50"}>
                 <AddToFavouritesButton
+                    refresh={true}
                     isLiked={true}
                     movieId={favourite.movie_id}
                 />

@@ -16,11 +16,13 @@ import { useToast } from "@/components/ui/use-toast"
 interface AddToFavouritesButtonProps {
     movieId: string
     isLiked?: boolean
+    refresh?: boolean
 }
 
 function AddToFavouritesButton({
     movieId,
     isLiked = false,
+    refresh = false,
 }: AddToFavouritesButtonProps) {
     const [isFavourite, setIsFavourite] = useState(isLiked)
     const [isLoading, setIsLoading] = useState(false)
@@ -39,6 +41,10 @@ function AddToFavouritesButton({
 
             if (!res.data) {
                 throw new Error("No data returned")
+            }
+
+            if (refresh) {
+                window.location.reload()
             }
         } catch (error) {
             setIsFavourite((prev) => !prev)

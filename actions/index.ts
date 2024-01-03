@@ -119,10 +119,14 @@ export async function getUserFavourites(): Promise<UserFavouriteWithMovie[]> {
 }
 
 export async function getMovieReviewsbyId(movieId: string) {
+    const user = await getSelf()
     try {
         const reviews = await prisma.userReview.findMany({
             where: {
                 movie_id: movieId,
+                NOT: {
+                    user_id: user?.id,
+                },
             },
             include: {
                 user: {
@@ -264,4 +268,21 @@ export async function getMoviesListWithReviews(
     }
 
     return movies
+}
+
+export async function getuserFavouriteMovieById(movieId: string) {
+    const user = await getSelf()
+
+    if (!user) {
+        return false
+    }
+
+    const isFavourite = await prisma.userFavourite.findFirst({
+        where: {
+            user_id: user.id,
+            movie_id: movieId,
+        },
+    })
+
+    return !!isFavourite
 }
