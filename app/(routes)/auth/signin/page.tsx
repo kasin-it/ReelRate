@@ -11,7 +11,7 @@ const LoginPage = async () => {
     if (!session) {
         return (
             <div className="flex h-full w-full justify-center">
-                <Card className="flex h-[150px] w-full max-w-lg flex-col items-center gap-5 py-5">
+                <Card className="flex h-[150px] w-full max-w-sm flex-col items-center gap-5 py-5">
                     <CardTitle>Sign In</CardTitle>
                     <GithubLoginButton />
                 </Card>

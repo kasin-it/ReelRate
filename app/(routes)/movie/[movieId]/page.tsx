@@ -135,12 +135,10 @@ async function MoviePage({ params: { movieId } }: MoviePageProps) {
                             {movie.release_date.toString()}
                         </span>
                     </p>
-                    <div className="flex w-full gap-3">
-                        <AddToFavouritesButton
-                            movieId={movieId}
-                            isLiked={isFavourite}
-                        />
-                    </div>
+                    <AddToFavouritesButton
+                        movieId={movieId}
+                        isLiked={isFavourite}
+                    />
                 </div>
             </div>
             <Separator />
