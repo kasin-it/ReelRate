@@ -6,6 +6,7 @@ import {
     UserFavouriteWithMovie,
     UserReviewWithMovie,
 } from "@/types"
+import { UserReview } from "@prisma/client"
 import { getServerSession } from "next-auth"
 
 import { DataTMDB, Genre, SingleDataTMDB } from "@/types/tmdb"
@@ -183,7 +184,7 @@ export async function getMovieWithReviews(
         let passiveReviews = 0
         let negativeReviews = 0
 
-        movie.userReviews.forEach((review) => {
+        movie.userReviews.forEach((review: UserReview) => {
             const { opinion } = getRating(review.rating, 1)
 
             reviewAverage += review.rating
@@ -234,7 +235,7 @@ export async function getMoviesListWithReviews(
             let passiveReviews = 0
             let negativeReviews = 0
 
-            movie.userReviews.forEach((review) => {
+            movie.userReviews.forEach((review: UserReview) => {
                 const { opinion } = getRating(review.rating, 1)
 
                 reviewAverage += review.rating
